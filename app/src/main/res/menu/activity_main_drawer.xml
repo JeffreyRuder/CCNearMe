@@ -20,16 +20,18 @@
             android:title="Tools" />
     </group>
 
-    <item android:title="Search Settings">
-        <menu>
+    <item android:title="Search Settings" >
+        <menu android:checkableBehavior="all">
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_public"
+                android:icon="@drawable/ic_thumb_up_black_24dp"
+                android:checked="true"
+                android:title="Include Public Colleges" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_private"
+                android:icon="@drawable/ic_thumb_up_black_24dp"
+                android:checked="true"
+                android:title="Include Private Colleges" />
         </menu>
     </item>
 
