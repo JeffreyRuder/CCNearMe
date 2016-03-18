@@ -9,24 +9,27 @@
         android:logo="@drawable/graduation_cap"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".AboutActivity"
-            android:label="@string/app_name"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.ccnearme.MainActivity" />
         </activity>
+
         <activity
             android:name=".ResultsActivity"
             android:label="@string/title_activity_results"
@@ -36,6 +39,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.ccnearme.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>

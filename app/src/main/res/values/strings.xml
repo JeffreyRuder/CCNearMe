@@ -10,6 +10,7 @@
     <string name="background_image_description">Student Walking</string>
 
     <string name="title_activity_results">Nearby Community Colleges</string>
+    <string name="title_activity_about">About CC Near Me</string>
 
     <string name="about_us_main">CC Near Me provides students and their families accurate, relevant information about nearby community colleges.\n\nCC Near Me adapts Department of Education data into a form that makes sense for community colleges, taking their students and missions into account.</string>
 

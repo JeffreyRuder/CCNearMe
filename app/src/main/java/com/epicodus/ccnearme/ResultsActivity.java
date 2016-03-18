@@ -33,6 +33,7 @@ public class ResultsActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ArrayList<College> arrayOfColleges = new ArrayList<College>();
