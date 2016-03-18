@@ -17,13 +17,14 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:textSize="45sp"
+        android:textColor="@color/colorPrimaryDark"
         android:text="@string/fa_graduation_cap" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Android Studio"
+        android:text="@string/tagline"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
