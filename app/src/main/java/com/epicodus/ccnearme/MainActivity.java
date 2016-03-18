@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -24,6 +25,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @Bind(R.id.background_image) ImageView mBackgroundImage;
+    @Bind(R.id.beginButton) Button mBeginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,14 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Picasso.with(this).load(R.drawable.background).fit().centerCrop().into(mBackgroundImage);
+
+        mBeginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -95,11 +105,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_about) {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_public || id == R.id.nav_private) {
             if (item.isChecked()) {
@@ -109,6 +114,7 @@ public class MainActivity extends AppCompatActivity
                 item.setIcon(R.drawable.ic_thumb_up_black_24dp);
                 item.setChecked(true);
             }
+            //TODO do something to persist this across activities
             return true;
 
         }
