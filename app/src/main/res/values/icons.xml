@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fa_graduation_cap">&#xf19d;</string>
+
+    <string name="icon_for_profit">&#xf0d6;</string>
+    <string name="icon_for_profit_label">For-Profit</string>
+
+    <string name="icon_non_profit">&#xf24e;</string>
+    <string name="icon_non_profit_label">Non-Profit</string>
+
+    <string name="icon_public_school">&#xf19c;</string>
+    <string name="icon_public_label">Public</string>
+
+    <string name="icon_private_school">&#xf19c;</string>
+    <string name="icon_private_label">Private</string>
+
+    <string name="icon_city">&#xf1ad;</string>
+    <string name="icon_city_label">City</string>
+    <string name="icon_town">&#xf015;</string>
+    <string name="icon_town_label">Town</string>
+    <string name="icon_rural">&#xf1bb;</string>
+    <string name="icon_rural_label">Rural</string>
+    
+    <string name="icon_multi_campus">&#xf0ca;</string>
+    <string name="icon_multi_campus_label">Multi-Campus</string>
+    
+    
+
+
 </resources>

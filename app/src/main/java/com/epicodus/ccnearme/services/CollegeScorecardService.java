@@ -27,6 +27,7 @@ public class CollegeScorecardService {
     private final String API_KEY;
     private static final String RESULTS_PER_PAGE = "50";
     private static final String CARNEGIE_EXCLUDE_PRIVATE = "1,2,3,4,5,6,7,8,9,12";
+    private static final String CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT = "1,2,3,4,5,6,7,8,9,10,11,12,13,14";
 
     public CollegeScorecardService(Context context) {
         mContext = context;
@@ -41,12 +42,14 @@ public class CollegeScorecardService {
                 "school.name," +
                 "school.city," +
                 "school.state," +
+                "school.locale," +
                 "school.carnegie_basic," +
-                "school.price_calculator_url";
+                "school.price_calculator_url," +
+                "school.school_url";
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.data.gov/ed/collegescorecard/v1/schools.json").newBuilder();
         urlBuilder.addQueryParameter("_fields", fieldsToInclude);
-        urlBuilder.addQueryParameter("school.carnegie_basic", CARNEGIE_EXCLUDE_PRIVATE);
+        urlBuilder.addQueryParameter("school.carnegie_basic", CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT);
         urlBuilder.addQueryParameter("_zip", zip);
         urlBuilder.addQueryParameter("_distance", searchRange + "mi");
         urlBuilder.addQueryParameter("_per_page", RESULTS_PER_PAGE);
@@ -73,10 +76,12 @@ public class CollegeScorecardService {
                     String name = collegeResult.getString("school.name");
                     String city = collegeResult.getString("school.city");
                     String state = collegeResult.getString("school.state");
+                    int locale = collegeResult.getInt("school.locale");
                     int carnegie = collegeResult.getInt("school.carnegie_basic");
                     String priceCalculatorUrl = collegeResult.getString("school.price_calculator_url");
+                    String collegeUrl = collegeResult.getString("school.school_url");
 
-                    College college = new College(id, name, city, state, carnegie, priceCalculatorUrl);
+                    College college = new College(id, name, city, state, locale, carnegie, priceCalculatorUrl, collegeUrl);
                     colleges.add(college);
                 }
             }
