@@ -44,10 +44,10 @@ public class ResultsActivity extends AppCompatActivity {
         mCollegeListView.setAdapter(adapter);
 
         //TODO: get this working with data from a JSON array
-        for (int i = 0; i < 12; i++) {
-            College sampleCollege = new College("Linn-Benton Community College", "Albany", "OR", "po.linnbenton.edu/institutionalresearch/netpricecalculator/npcalc.htm");
-            adapter.add(sampleCollege);
-        }
+//        for (int i = 0; i < 12; i++) {
+//            College sampleCollege = new College("Linn-Benton Community College", "Albany", "OR", "po.linnbenton.edu/institutionalresearch/netpricecalculator/npcalc.htm");
+//            adapter.add(sampleCollege);
+//        }
     }
 
 }

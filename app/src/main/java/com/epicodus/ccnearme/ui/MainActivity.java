@@ -23,9 +23,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     @Bind(R.id.background_image) ImageView mBackgroundImage;
     @Bind(R.id.beginButton) Button mBeginButton;
+    @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +36,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mBeginButton.setOnClickListener(this);
+        mFloatingActionButton.setOnClickListener(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -55,13 +50,17 @@ public class MainActivity extends AppCompatActivity
 
         Picasso.with(this).load(R.drawable.background).fit().centerCrop().into(mBackgroundImage);
 
-        mBeginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
-                startActivity(intent);
-            }
-        });
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == mBeginButton) {
+            Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+            startActivity(intent);
+        } else if (view == mFloatingActionButton) {
+            Snackbar.make(view, "Do something here", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     @Override
