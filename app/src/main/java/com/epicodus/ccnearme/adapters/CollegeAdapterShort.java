@@ -6,13 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -52,8 +49,8 @@ public class CollegeAdapterShort extends RecyclerView.Adapter<CollegeAdapterShor
     public class CollegeViewHolderShort extends RecyclerView.ViewHolder {
         @Bind(R.id.collegeNameTextView) TextView mCollegeNameTextView;
         @Bind(R.id.collegeCityTextView) TextView mCollegeCityTextView;
-        @Bind(R.id.publicPrivateIcon) TextView mPublicPrivate;
-        @Bind(R.id.publicPrivateIconLabel) TextView mPublicPrivateLabel;
+        @Bind(R.id.publicPrivateIcon) TextView mOwnershipIcon;
+        @Bind(R.id.publicPrivateIconLabel) TextView mOwnershipLabel;
         @Bind(R.id.profitNonprofitIcon) TextView mProfitNonprofit;
         @Bind(R.id.profitNonprofitIconLabel) TextView mProfitNonProfitLabel;
         @Bind(R.id.urbanRuralIcon) TextView mUrbanRural;
@@ -73,14 +70,14 @@ public class CollegeAdapterShort extends RecyclerView.Adapter<CollegeAdapterShor
 
             mCollegeNameTextView.setText(college.getName());
             mCollegeCityTextView.setText(String.format(Locale.US, res.getString(R.string.city_state), college.getCity(), college.getState()));
-            mPublicPrivate.setText(college.getPublicPrivateIcon(res)[0]);
-            mPublicPrivateLabel.setText(college.getPublicPrivateIcon(res)[1]);
-            mProfitNonprofit.setText(college.getProfitNonprofitIcon(res)[0]);
-            mProfitNonProfitLabel.setText(college.getProfitNonprofitIcon(res)[1]);
-            mUrbanRural.setText(college.getUrbanRuralIcon(res)[0]);
-            mUrbanRuralLabel.setText(college.getUrbanRuralIcon(res)[1]);
+            mOwnershipIcon.setText(college.getOwnershipIcon(res));
+            mOwnershipLabel.setText(college.getOwnershipText());
+            mProfitNonprofit.setText(college.getProfitStatusIcon(res));
+            mProfitNonProfitLabel.setText(college.getProfitStatusText());
+            mUrbanRural.setText(college.getLocaleIcon(res));
+            mUrbanRuralLabel.setText(college.getLocaleText());
 
-            if (college.getMultiCampusIcon(res).length == 0) {
+            if (!college.isMultiCampus()) {
                 mNumberCampuses.setVisibility(View.INVISIBLE);
                 mNumberCampusesLabel.setVisibility(View.INVISIBLE);
             }

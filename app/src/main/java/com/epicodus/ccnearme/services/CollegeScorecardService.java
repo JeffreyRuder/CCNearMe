@@ -42,8 +42,10 @@ public class CollegeScorecardService {
                 "school.name," +
                 "school.city," +
                 "school.state," +
+                "school.ownership," +
                 "school.locale," +
                 "school.carnegie_basic," +
+                "school.branches," +
                 "school.price_calculator_url," +
                 "school.school_url";
 
@@ -76,12 +78,15 @@ public class CollegeScorecardService {
                     String name = collegeResult.getString("school.name");
                     String city = collegeResult.getString("school.city");
                     String state = collegeResult.getString("school.state");
+                    int ownership = collegeResult.getInt("school.ownership");
                     int locale = collegeResult.getInt("school.locale");
                     int carnegie = collegeResult.getInt("school.carnegie_basic");
+                    int numberOfBranches = collegeResult.getInt("school.branches");
                     String priceCalculatorUrl = collegeResult.getString("school.price_calculator_url");
                     String collegeUrl = collegeResult.getString("school.school_url");
 
-                    College college = new College(id, name, city, state, locale, carnegie, priceCalculatorUrl, collegeUrl);
+                    College college = new College(id, name, city, state, ownership, locale, carnegie,
+                            numberOfBranches, priceCalculatorUrl, collegeUrl);
                     colleges.add(college);
                 }
             }

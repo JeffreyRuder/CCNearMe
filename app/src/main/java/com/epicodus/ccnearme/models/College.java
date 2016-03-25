@@ -10,22 +10,26 @@ import org.parceler.Parcel;
 public class College {
     public int id;
     public String name;
-    public String city;
-    public String state;
+    public String mCity;
+    public String mState;
+    public int mOwnershipCode;
     public int mLocaleCode;
     public int mCarnegieBasicCode;
+    public int mNumberOfBranches;
     public String price_calculator_url;
     public String college_main_url;
 
     public College(){}
 
-    public College(int id, String name, String city, String state, int locale, int carnegie, String price_calculator_url, String college_main_url) {
+    public College(int id, String name, String city, String state, int ownership, int locale, int carnegie, int numberOfBranches, String price_calculator_url, String college_main_url) {
         this.id = id;
         this.name = name;
-        this.city = city;
-        this.state = state;
+        mCity = city;
+        mState = state;
+        mOwnershipCode = ownership;
         mLocaleCode = locale;
         mCarnegieBasicCode = carnegie;
+        mNumberOfBranches = numberOfBranches;
         this.price_calculator_url = price_calculator_url;
         this.college_main_url = college_main_url;
     }
@@ -39,11 +43,41 @@ public class College {
     }
 
     public String getCity() {
-        return city;
+        return mCity;
     }
 
     public String getState() {
-        return state;
+        return mState;
+    }
+
+    public int getOwnershipCode() {
+        return mOwnershipCode;
+    }
+
+    public String getOwnershipText() {
+        if (mOwnershipCode == 1) {
+            return "Public";
+        } else {
+            return "Private";
+        }
+    }
+
+    public String getProfitStatusText() {
+        if (mOwnershipCode == 3) {
+            return "For-Profit";
+        } else {
+            return "Non-Profit";
+        }
+    }
+
+    public String getLocaleText() {
+        if (mLocaleCode < 13 ) {
+            return "City";
+        } else if (mLocaleCode > 40) {
+            return "Rural";
+        } else {
+            return "Town";
+        }
     }
 
     public int getLocaleCode() {
@@ -54,6 +88,10 @@ public class College {
         return mCarnegieBasicCode;
     }
 
+    public int getNumberOfBranches() {
+        return mNumberOfBranches;
+    }
+
     public String getPriceCalculatorUrl() {
         return price_calculator_url;
     }
@@ -62,37 +100,41 @@ public class College {
         return college_main_url;
     }
 
-    public String[] getPublicPrivateIcon(Resources resources) {
-        if (mCarnegieBasicCode <= 8 | mCarnegieBasicCode == 11 | mCarnegieBasicCode == 12) {
-            return new String[] {resources.getString(R.string.icon_public_school), resources.getString(R.string.icon_public_label)};
+    public String getOwnershipIcon (Resources resources) {
+        if (mOwnershipCode == 1) {
+            return resources.getString(R.string.icon_public_school);
         } else {
-            return new String[] {resources.getString(R.string.icon_private_school), resources.getString(R.string.icon_private_label)};
+            return resources.getString(R.string.icon_private_school);
         }
     }
 
-    public String[] getProfitNonprofitIcon(Resources resources) {
-        if (mCarnegieBasicCode == 10 | mCarnegieBasicCode == 14) {
-            return new String[] {resources.getString(R.string.icon_for_profit), resources.getString(R.string.icon_for_profit_label)};
+    public String getProfitStatusIcon(Resources resources) {
+        if (mOwnershipCode == 3) {
+            return resources.getString(R.string.icon_for_profit);
         } else {
-            return new String[] {resources.getString(R.string.icon_non_profit), resources.getString(R.string.icon_non_profit_label)};
+            return resources.getString(R.string.icon_non_profit);
         }
     }
 
-    public String[] getUrbanRuralIcon(Resources resources) {
+    public String getLocaleIcon(Resources resources) {
         if (mLocaleCode < 13 ) {
-            return new String[] {resources.getString(R.string.icon_city), resources.getString(R.string.icon_city_label)};
+            return resources.getString(R.string.icon_city);
         } else if (mLocaleCode > 40) {
-            return new String[] {resources.getString(R.string.icon_rural), resources.getString(R.string.icon_rural_label)};
+            return resources.getString(R.string.icon_rural);
         } else {
-            return new String[] {resources.getString(R.string.icon_town), resources.getString(R.string.icon_town_label)};
+            return resources.getString(R.string.icon_town);
         }
     }
 
-    public String[] getMultiCampusIcon(Resources resources) {
-        if (mCarnegieBasicCode == 5 | mCarnegieBasicCode == 7) {
-            return new String[] {resources.getString(R.string.icon_multi_campus), resources.getString(R.string.icon_multi_campus_label)};
+    public String getMultiCampusIcon(Resources resources) {
+        if (mNumberOfBranches > 1) {
+            return resources.getString(R.string.icon_multi_campus);
         } else {
-            return new String[]{};
+            return "";
         }
+    }
+
+    public boolean isMultiCampus() {
+        return (mCarnegieBasicCode == 5 | mCarnegieBasicCode == 7 | mNumberOfBranches > 1);
     }
 }

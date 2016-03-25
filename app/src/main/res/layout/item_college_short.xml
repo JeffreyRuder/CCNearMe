@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:text="Collin County Community College"
         android:id="@+id/collegeNameTextView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Plano, TX"
         android:id="@+id/collegeCityTextView" />
@@ -51,6 +51,7 @@
                 android:layout_below="@id/publicPrivateIcon"
                 android:layout_centerHorizontal="true"
                 android:textAlignment="center"
+                android:textSize="12sp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/publicPrivateIconLabel" />
@@ -83,6 +84,7 @@
                 android:layout_below="@id/profitNonprofitIcon"
                 android:layout_centerHorizontal="true"
                 android:textAlignment="center"
+                android:textSize="12sp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/profitNonprofitIconLabel" />
@@ -115,6 +117,7 @@
                 android:layout_below="@id/urbanRuralIcon"
                 android:layout_centerHorizontal="true"
                 android:textAlignment="center"
+                android:textSize="12sp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/urbanRuralIconLabel" />
@@ -147,6 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/numberCampusesIcon"
                 android:layout_centerHorizontal="true"
+                android:textSize="12sp"
                 android:textAlignment="center"
                 android:text="@string/icon_multi_campus_label"
                 android:textAppearance="?android:attr/textAppearanceSmall"
