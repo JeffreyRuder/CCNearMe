@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +21,8 @@ import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.CollegeScorecardService;
 import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         if (view == mBeginButton) {
             Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+            intent.putExtra("colleges", Parcels.wrap(mNearbyColleges));
             startActivity(intent);
         } else if (view == mFloatingActionButton) {
             Snackbar.make(view, "Do something here", Snackbar.LENGTH_LONG)
