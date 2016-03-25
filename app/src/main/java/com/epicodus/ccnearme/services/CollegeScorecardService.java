@@ -1,6 +1,7 @@
 package com.epicodus.ccnearme.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
@@ -10,7 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -25,6 +29,7 @@ import okhttp3.Response;
 public class CollegeScorecardService {
     private Context mContext;
     private final String API_KEY;
+    private static final String API_ENDPOINT = "https://api.data.gov/ed/collegescorecard/v1/schools.json";
     private static final String RESULTS_PER_PAGE = "50";
     private static final String CARNEGIE_EXCLUDE_PRIVATE = "1,2,3,4,5,6,7,8,9,12";
     private static final String CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT = "1,2,3,4,5,6,7,8,9,10,11,12,13,14";
@@ -49,7 +54,10 @@ public class CollegeScorecardService {
                 "school.price_calculator_url," +
                 "school.school_url";
 
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.data.gov/ed/collegescorecard/v1/schools.json").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(API_ENDPOINT).newBuilder();
+        //check to make sure the school was still enrolling students recently
+        urlBuilder.addQueryParameter(getThreeYearsAgo() + ".student.size__range", "1..");
+
         urlBuilder.addQueryParameter("_fields", fieldsToInclude);
         urlBuilder.addQueryParameter("school.carnegie_basic", CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT);
         urlBuilder.addQueryParameter("_zip", zip);
@@ -94,5 +102,12 @@ public class CollegeScorecardService {
             exception.printStackTrace();
         }
         return colleges;
+    }
+
+    private String getThreeYearsAgo() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -3);
+        return (dateFormat.format(calendar.getTime()));
     }
 }

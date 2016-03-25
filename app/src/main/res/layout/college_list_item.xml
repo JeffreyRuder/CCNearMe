@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="18sp"
+        android:textColor="@color/colorPrimaryDark"
         android:text="Collin County Community College"
         android:id="@+id/collegeNameTextView" />
 

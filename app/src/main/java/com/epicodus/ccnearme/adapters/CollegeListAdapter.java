@@ -17,27 +17,24 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by Jeffrey on 3/18/2016.
- */
-public class CollegeAdapterShort extends RecyclerView.Adapter<CollegeAdapterShort.CollegeViewHolderShort> {
+public class CollegeListAdapter extends RecyclerView.Adapter<CollegeListAdapter.CollegeListViewHolder> {
     private ArrayList<College> mColleges = new ArrayList<>();
     private Context mContext;
 
-    public CollegeAdapterShort(Context context, ArrayList<College> colleges) {
+    public CollegeListAdapter(Context context, ArrayList<College> colleges) {
         mColleges = colleges;
         mContext = context;
     }
 
     @Override
-    public CollegeAdapterShort.CollegeViewHolderShort onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_college_short, parent, false);
-        CollegeViewHolderShort viewHolder = new CollegeViewHolderShort(view);
+    public CollegeListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.college_list_item, parent, false);
+        CollegeListViewHolder viewHolder = new CollegeListViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(CollegeAdapterShort.CollegeViewHolderShort holder, int position) {
+    public void onBindViewHolder(CollegeListViewHolder holder, int position) {
         holder.bindCollege(mColleges.get(position));
     }
 
@@ -46,7 +43,7 @@ public class CollegeAdapterShort extends RecyclerView.Adapter<CollegeAdapterShor
         return mColleges.size();
     }
 
-    public class CollegeViewHolderShort extends RecyclerView.ViewHolder {
+    public class CollegeListViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.collegeNameTextView) TextView mCollegeNameTextView;
         @Bind(R.id.collegeCityTextView) TextView mCollegeCityTextView;
         @Bind(R.id.publicPrivateIcon) TextView mOwnershipIcon;
@@ -59,7 +56,7 @@ public class CollegeAdapterShort extends RecyclerView.Adapter<CollegeAdapterShor
         @Bind(R.id.numberCampusesIconLabel) TextView mNumberCampusesLabel;
         private Context mContext;
 
-        public CollegeViewHolderShort(View itemView) {
+        public CollegeListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             mContext = itemView.getContext();

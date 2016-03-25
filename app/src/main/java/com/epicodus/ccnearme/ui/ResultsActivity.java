@@ -8,11 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ListView;
 
-import com.epicodus.ccnearme.adapters.CollegeAdapterShort;
+import com.epicodus.ccnearme.adapters.CollegeListAdapter;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
+import com.epicodus.ccnearme.views.DividerItemDecoration;
 
 import org.parceler.Parcels;
 
@@ -26,7 +26,7 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
 
     private ArrayList<College> mNearbyColleges;
-    private CollegeAdapterShort mAdapter;
+    private CollegeListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +39,13 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         mFloatingActionButton.setOnClickListener(this);
         mNearbyColleges = Parcels.unwrap(getIntent().getParcelableExtra("colleges"));
 
-        mAdapter = new CollegeAdapterShort(getApplicationContext(), mNearbyColleges);
+        mAdapter = new CollegeListAdapter(getApplicationContext(), mNearbyColleges);
         mCollegeRecyclerView.setAdapter(mAdapter);
         RecyclerView.LayoutManager layoutManager =
                 new LinearLayoutManager(ResultsActivity.this);
         mCollegeRecyclerView.setLayoutManager(layoutManager);
         mCollegeRecyclerView.setHasFixedSize(true);
+        mCollegeRecyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), R.drawable.divider_shadow));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
