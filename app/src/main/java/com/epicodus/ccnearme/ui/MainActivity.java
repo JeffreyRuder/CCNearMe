@@ -1,7 +1,6 @@
-package com.epicodus.ccnearme;
+package com.epicodus.ccnearme.ui;
 
 import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.epicodus.ccnearme.R;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;

@@ -1,4 +1,4 @@
-package com.epicodus.ccnearme;
+package com.epicodus.ccnearme.views;
 
 import android.content.Context;
 import android.graphics.Typeface;
