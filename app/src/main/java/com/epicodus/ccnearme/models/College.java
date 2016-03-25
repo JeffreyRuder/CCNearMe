@@ -12,6 +12,7 @@ public class College {
     public String name;
     public String mCity;
     public String mState;
+    public int mZip;
     public int mOwnershipCode;
     public int mLocaleCode;
     public int mCarnegieBasicCode;
@@ -21,11 +22,12 @@ public class College {
 
     public College(){}
 
-    public College(int id, String name, String city, String state, int ownership, int locale, int carnegie, int numberOfBranches, String price_calculator_url, String college_main_url) {
+    public College(int id, String name, String city, String state, int zip, int ownership, int locale, int carnegie, int numberOfBranches, String price_calculator_url, String college_main_url) {
         this.id = id;
         this.name = name;
         mCity = city;
         mState = state;
+        mZip = zip;
         mOwnershipCode = ownership;
         mLocaleCode = locale;
         mCarnegieBasicCode = carnegie;
@@ -48,6 +50,10 @@ public class College {
 
     public String getState() {
         return mState;
+    }
+
+    public int getZip() {
+        return mZip;
     }
 
     public int getOwnershipCode() {

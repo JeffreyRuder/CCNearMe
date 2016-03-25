@@ -1,7 +1,6 @@
 package com.epicodus.ccnearme.services;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
@@ -47,6 +46,7 @@ public class CollegeScorecardService {
                 "school.name," +
                 "school.city," +
                 "school.state," +
+                "school.zip," +
                 "school.ownership," +
                 "school.locale," +
                 "school.carnegie_basic," +
@@ -56,7 +56,7 @@ public class CollegeScorecardService {
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(API_ENDPOINT).newBuilder();
         //check to make sure the school was still enrolling students recently
-        urlBuilder.addQueryParameter(getThreeYearsAgo() + ".student.size__range", "1..");
+        urlBuilder.addQueryParameter(threeYearsAgo() + ".student.size__range", "1..");
 
         urlBuilder.addQueryParameter("_fields", fieldsToInclude);
         urlBuilder.addQueryParameter("school.carnegie_basic", CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT);
@@ -86,6 +86,7 @@ public class CollegeScorecardService {
                     String name = collegeResult.getString("school.name");
                     String city = collegeResult.getString("school.city");
                     String state = collegeResult.getString("school.state");
+                    int zip = collegeResult.getInt("school.zip");
                     int ownership = collegeResult.getInt("school.ownership");
                     int locale = collegeResult.getInt("school.locale");
                     int carnegie = collegeResult.getInt("school.carnegie_basic");
@@ -93,8 +94,8 @@ public class CollegeScorecardService {
                     String priceCalculatorUrl = collegeResult.getString("school.price_calculator_url");
                     String collegeUrl = collegeResult.getString("school.school_url");
 
-                    College college = new College(id, name, city, state, ownership, locale, carnegie,
-                            numberOfBranches, priceCalculatorUrl, collegeUrl);
+                    College college = new College(id, name, city, state, zip, ownership, locale,
+                            carnegie, numberOfBranches, priceCalculatorUrl, collegeUrl);
                     colleges.add(college);
                 }
             }
@@ -104,7 +105,7 @@ public class CollegeScorecardService {
         return colleges;
     }
 
-    private String getThreeYearsAgo() {
+    private String threeYearsAgo() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -3);

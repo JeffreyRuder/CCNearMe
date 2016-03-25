@@ -1,6 +1,7 @@
 package com.epicodus.ccnearme.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
+import com.epicodus.ccnearme.ui.CollegeDetailActivity;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -60,6 +64,16 @@ public class CollegeListAdapter extends RecyclerView.Adapter<CollegeListAdapter.
             super(itemView);
             ButterKnife.bind(this, itemView);
             mContext = itemView.getContext();
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int itemPosition = getLayoutPosition();
+                    Intent intent = new Intent(mContext, CollegeDetailActivity.class);
+                    intent.putExtra("position", itemPosition + "");
+                    intent.putExtra("colleges", Parcels.wrap(mColleges));
+                    mContext.startActivity(intent);
+                }
+            });
         }
 
         public void bindCollege(College college) {

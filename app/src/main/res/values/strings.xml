@@ -12,6 +12,7 @@
     <string name="main_activity_button_text">Explore</string>
 
     <string name="city_state" formatted="false">%s, %s</string>
+    <string name="city_state_zip" formatted="false">%s, %s %d</string>
 
     <string name="title_activity_results">Nearby Community Colleges</string>
     <string name="title_activity_about">About CC Near Me</string>
