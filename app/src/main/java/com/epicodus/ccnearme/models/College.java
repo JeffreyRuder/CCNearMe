@@ -1,5 +1,8 @@
 package com.epicodus.ccnearme.models;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class College {
     public int id;
     public String name;
@@ -7,6 +10,8 @@ public class College {
     public String state;
     public int carnegie_basic;
     public String price_calculator_url;
+
+    public College(){}
 
     public College(int id, String name, String city, String state, int carnegie_basic, String price_calculator_url) {
         this.id = id;

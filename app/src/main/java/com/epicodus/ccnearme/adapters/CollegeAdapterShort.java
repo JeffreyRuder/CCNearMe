@@ -1,6 +1,7 @@
 package com.epicodus.ccnearme.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by Jeffrey on 3/18/2016.
@@ -22,6 +24,7 @@ public class CollegeAdapterShort extends ArrayAdapter<College> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Resources res = getContext().getResources();
         // Get the data item for this position
         College college = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -33,9 +36,9 @@ public class CollegeAdapterShort extends ArrayAdapter<College> {
         TextView tvCity = (TextView) convertView.findViewById(R.id.tvCity);
         TextView tvPriceCalculator = (TextView) convertView.findViewById(R.id.tvPriceCalculator);
         // Populate the data into the template view using the data object
-        tvName.setText(college.name);
-        tvCity.setText(college.city + ", " + college.state);
-        tvPriceCalculator.setText(college.price_calculator_url);
+        tvName.setText(college.getName());
+        tvCity.setText(String.format(Locale.US, res.getString(R.string.city_state), college.getCity(), college.getState()));
+        tvPriceCalculator.setText(college.getPriceCalculatorUrl());
         // Return the completed view to render on screen
         return convertView;
     }

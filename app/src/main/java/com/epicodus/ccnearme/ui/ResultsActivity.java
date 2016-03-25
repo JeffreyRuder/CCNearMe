@@ -12,13 +12,18 @@ import com.epicodus.ccnearme.adapters.CollegeAdapterShort;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ResultsActivity extends AppCompatActivity {
+public class ResultsActivity extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.collegeListView) ListView mCollegeListView;
+    @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
+
+    private ArrayList<College> mNearbyColleges;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,26 +33,20 @@ public class ResultsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        ArrayList<College> arrayOfColleges = new ArrayList<College>();
-        CollegeAdapterShort adapter = new CollegeAdapterShort(this, arrayOfColleges);
+        mFloatingActionButton.setOnClickListener(this);
+        mNearbyColleges = Parcels.unwrap(getIntent().getParcelableExtra("colleges"));
+        CollegeAdapterShort adapter = new CollegeAdapterShort(this, mNearbyColleges);
         mCollegeListView.setAdapter(adapter);
 
-        //TODO: get this working with data from a JSON array
-//        for (int i = 0; i < 12; i++) {
-//            College sampleCollege = new College("Linn-Benton Community College", "Albany", "OR", "po.linnbenton.edu/institutionalresearch/netpricecalculator/npcalc.htm");
-//            adapter.add(sampleCollege);
-//        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == mFloatingActionButton) {
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
 }
