@@ -1,8 +1,5 @@
 package com.epicodus.ccnearme.models;
 
-/**
- * Created by Jeffrey on 3/18/2016.
- */
 public class College {
     public int id;
     public String name;
@@ -18,5 +15,29 @@ public class College {
         this.state = state;
         this.carnegie_basic = carnegie_basic;
         this.price_calculator_url = price_calculator_url;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public int getCarnegieId() {
+        return carnegie_basic;
+    }
+
+    public String getPriceCalculatorUrl() {
+        return price_calculator_url;
     }
 }

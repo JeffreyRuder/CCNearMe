@@ -16,12 +16,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.epicodus.ccnearme.R;
+import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.CollegeScorecardService;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.background_image) ImageView mBackgroundImage;
     @Bind(R.id.beginButton) Button mBeginButton;
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
+    @Bind(R.id.collegesNearYouNumberTextView) TextView mCollegesNearYouNumberTextView;
+
+    private ArrayList<College> mNearbyColleges = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +51,9 @@ public class MainActivity extends AppCompatActivity
 
         getColleges("97218", 20);
 
-        mBeginButton.setOnClickListener(this);
         mFloatingActionButton.setOnClickListener(this);
+        mBeginButton.setOnClickListener(this);
+        mBeginButton.setEnabled(false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -133,9 +140,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getColleges(String location, int searchRange) {
-        final CollegeScorecardService dataGovService = new CollegeScorecardService(this);
+        final CollegeScorecardService collegeScorecardService = new CollegeScorecardService(this);
 
-        dataGovService.findColleges(location, searchRange, new Callback() {
+        collegeScorecardService.findColleges(location, searchRange, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -143,14 +150,20 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String jsonData = response.body().string();
-                    if (response.isSuccessful()) {
-                        Log.v("JSON DATA: ", jsonData);
+                mNearbyColleges = collegeScorecardService.processResults(response);
+
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (mNearbyColleges.size() > 0) {
+                            mCollegesNearYouNumberTextView.setText(String.format(getString(R.string.main_activity_near_you), mNearbyColleges.size()));
+                        } else {
+                            mCollegesNearYouNumberTextView.setText(R.string.main_activity_none_nearby);
+                        }
+                        mBeginButton.setEnabled(true);
                     }
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
+                });
             }
         });
     }
