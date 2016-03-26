@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,13 +76,15 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v == mWebsiteIcon) {
-            Uri website = Uri.parse(mCollege.getMainUrl());
+            Uri website = Uri.parse("http://" + mCollege.getMainUrl());
+            Log.v("SITE", website.toString());
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
             if (isSafe(intent)) {
                 startActivity(intent);
             }
         } else if (v == mPriceCalculatorIcon) {
-            Uri website = Uri.parse(mCollege.getPriceCalculatorUrl());
+            Uri website = Uri.parse("http://" + mCollege.getPriceCalculatorUrl());
+            Log.v("SITE", website.toString());
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
             if (isSafe(intent)) {
                 startActivity(intent);

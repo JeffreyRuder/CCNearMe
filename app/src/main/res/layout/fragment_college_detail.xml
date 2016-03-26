@@ -72,11 +72,12 @@
                     android:layout_height="wrap_content">
 
                     <com.epicodus.ccnearme.views.FontAwesomeIconTextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:text="&#xf108;"
                         android:textSize="30sp"
                         android:onClick="onClick"
+                        android:textAlignment="center"
                         android:clickable="true"
                         android:id="@+id/websiteIcon"
                         android:textColor="@color/colorPrimaryDark" />
@@ -99,10 +100,11 @@
                     android:id="@+id/priceCalculatorLayout">
 
                     <com.epicodus.ccnearme.views.FontAwesomeIconTextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:text="&#xf155;"
                         android:textSize="30sp"
+                        android:textAlignment="center"
                         android:id="@+id/priceCalculatorIcon"
                         android:onClick="onClick"
                         android:clickable="true"

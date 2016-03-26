@@ -1,7 +1,5 @@
 package com.epicodus.ccnearme.services;
 
-import android.content.Context;
-
 import com.epicodus.ccnearme.models.College;
 
 import okhttp3.HttpUrl;
