@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;

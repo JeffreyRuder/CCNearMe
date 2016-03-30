@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.CollegeScorecardService;
+import com.epicodus.ccnearme.services.GeolocateService;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;

@@ -3,6 +3,7 @@ package com.epicodus.ccnearme.models;
 import android.content.res.Resources;
 
 import com.epicodus.ccnearme.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.parceler.Parcel;
 
@@ -19,6 +20,7 @@ public class College {
     public int mNumberOfBranches;
     public String price_calculator_url;
     public String college_main_url;
+    public LatLng mLatLng;
 
     public College(){}
 
@@ -142,5 +144,13 @@ public class College {
 
     public boolean isMultiCampus() {
         return (mCarnegieBasicCode == 5 | mCarnegieBasicCode == 7 | mNumberOfBranches > 1);
+    }
+
+    public void setLatLng(LatLng latLng) {
+        mLatLng = latLng;
+    }
+
+    public LatLng getLatLng() {
+        return mLatLng;
     }
 }
