@@ -21,7 +21,7 @@ Ensure you have Android Studio installed.
 
 Clone this repository into your AndroidStudioProjects directory.
 
-You will need to obtain API keys for [Data.gov](https://api.data.gov/) and [Google Static Maps](https://developers.google.com/maps/documentation/static-maps/).
+You will need to obtain API keys for [Data.gov](https://api.data.gov/) and [Google Maps](https://developers.google.com/maps/documentation/android-api/).
 
 Then create a `keys.xml` file in the project's `app/res/values/` directory:
 
