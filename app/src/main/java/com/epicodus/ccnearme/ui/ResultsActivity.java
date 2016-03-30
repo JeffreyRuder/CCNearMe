@@ -12,14 +12,19 @@ import android.view.View;
 import com.epicodus.ccnearme.adapters.CollegeListAdapter;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
+import com.epicodus.ccnearme.services.GeolocateService;
 import com.epicodus.ccnearme.views.DividerItemDecoration;
 
 import org.parceler.Parcels;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class ResultsActivity extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.recyclerView) RecyclerView mCollegeRecyclerView;
@@ -39,6 +44,10 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         mFloatingActionButton.setOnClickListener(this);
         mNearbyColleges = Parcels.unwrap(getIntent().getParcelableExtra("colleges"));
 
+        for (College college : mNearbyColleges) {
+            setCollegeLocation(college);
+        }
+
         mAdapter = new CollegeListAdapter(getApplicationContext(), mNearbyColleges);
         mCollegeRecyclerView.setAdapter(mAdapter);
         RecyclerView.LayoutManager layoutManager =
@@ -56,6 +65,21 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
+    }
+
+    private void setCollegeLocation(final College college) {
+        final GeolocateService geolocateService = new GeolocateService(this);
+        geolocateService.getLocation(college, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                geolocateService.setLocation(college, response);
+            }
+        });
     }
 
 }
