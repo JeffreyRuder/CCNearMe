@@ -32,7 +32,9 @@ public class SavedCollegeListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         Firebase.setAndroidContext(this);
         mFirebaseRef = CollegeApplication.getAppInstance().getFirebaseRef();
