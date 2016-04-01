@@ -3,7 +3,9 @@ package com.epicodus.ccnearme.models;
 import android.content.res.Resources;
 
 import com.epicodus.ccnearme.R;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.nearby.messages.PublishCallback;
 
 import org.parceler.Parcel;
 
@@ -11,31 +13,32 @@ import org.parceler.Parcel;
 public class College {
     public int id;
     public String name;
-    public String mCity;
-    public String mState;
-    public int mZip;
-    public int mOwnershipCode;
-    public int mLocaleCode;
-    public int mCarnegieBasicCode;
-    public int mNumberOfBranches;
-    public String price_calculator_url;
-    public String college_main_url;
-    public LatLng mLatLng;
+    public String city;
+    public String state;
+    public int zip;
+    public int ownershipCode;
+    public int localeCode;
+    public int carnegieBasicCode;
+    public int numberOfBranches;
+    public String priceCalculatorUrl;
+    public String collegeMainUrl;
+    public Double lat;
+    public Double lng;
 
     public College(){}
 
     public College(int id, String name, String city, String state, int zip, int ownership, int locale, int carnegie, int numberOfBranches, String price_calculator_url, String college_main_url) {
         this.id = id;
         this.name = name;
-        mCity = city;
-        mState = state;
-        mZip = zip;
-        mOwnershipCode = ownership;
-        mLocaleCode = locale;
-        mCarnegieBasicCode = carnegie;
-        mNumberOfBranches = numberOfBranches;
-        this.price_calculator_url = price_calculator_url;
-        this.college_main_url = college_main_url;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.ownershipCode = ownership;
+        this.localeCode = locale;
+        this.carnegieBasicCode = carnegie;
+        this.numberOfBranches = numberOfBranches;
+        this.priceCalculatorUrl = price_calculator_url;
+        this.collegeMainUrl = college_main_url;
     }
 
     public int getId() {
@@ -47,110 +50,125 @@ public class College {
     }
 
     public String getCity() {
-        return mCity;
+        return city;
     }
 
     public String getState() {
-        return mState;
+        return state;
     }
 
     public int getZip() {
-        return mZip;
+        return zip;
     }
 
     public int getOwnershipCode() {
-        return mOwnershipCode;
+        return ownershipCode;
     }
 
-    public String getOwnershipText() {
-        if (mOwnershipCode == 1) {
-            return "Public";
-        } else {
-            return "Private";
-        }
+    public int getLocaleCode() {
+        return localeCode;
     }
 
+    public int getCarnegieBasicCode() {
+        return carnegieBasicCode;
+    }
+
+    public int getNumberOfBranches() {
+        return numberOfBranches;
+    }
+
+    public String getPriceCalculatorUrl() {
+        return priceCalculatorUrl;
+    }
+
+    public String getCollegeMainUrl() {
+        return collegeMainUrl;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    @JsonIgnore
+    public boolean isMultiCampus() {
+        return (carnegieBasicCode == 5 | carnegieBasicCode == 7 | numberOfBranches > 1);
+    }
+
+    @JsonIgnore
+    public void setLatLng(LatLng latLng) {
+        lat = latLng.latitude;
+        lng = latLng.longitude;
+    }
+
+    @JsonIgnore
     public String getProfitStatusText() {
-        if (mOwnershipCode == 3) {
+        if (ownershipCode == 3) {
             return "For-Profit";
         } else {
             return "Non-Profit";
         }
     }
 
+    @JsonIgnore
     public String getLocaleText() {
-        if (mLocaleCode < 13 ) {
+        if (localeCode < 13 ) {
             return "City";
-        } else if (mLocaleCode > 40) {
+        } else if (localeCode > 40) {
             return "Rural";
         } else {
             return "Town";
         }
     }
 
-    public int getLocaleCode() {
-        return mLocaleCode;
+    @JsonIgnore
+    public String getOwnershipText() {
+        if (ownershipCode == 1) {
+            return "Public";
+        } else {
+            return "Private";
+        }
     }
 
-    public int getCarnegieBasicCode() {
-        return mCarnegieBasicCode;
-    }
-
-    public int getNumberOfBranches() {
-        return mNumberOfBranches;
-    }
-
-    public String getPriceCalculatorUrl() {
-        return price_calculator_url;
-    }
-
-    public String getMainUrl() {
-        return college_main_url;
-    }
-
+    @JsonIgnore
     public String getOwnershipIcon (Resources resources) {
-        if (mOwnershipCode == 1) {
+        if (ownershipCode == 1) {
             return resources.getString(R.string.icon_public_school);
         } else {
             return resources.getString(R.string.icon_private_school);
         }
     }
 
+    @JsonIgnore
     public String getProfitStatusIcon(Resources resources) {
-        if (mOwnershipCode == 3) {
+        if (ownershipCode == 3) {
             return resources.getString(R.string.icon_for_profit);
         } else {
             return resources.getString(R.string.icon_non_profit);
         }
     }
 
+    @JsonIgnore
     public String getLocaleIcon(Resources resources) {
-        if (mLocaleCode < 13 ) {
+        if (localeCode < 13 ) {
             return resources.getString(R.string.icon_city);
-        } else if (mLocaleCode > 40) {
+        } else if (localeCode > 40) {
             return resources.getString(R.string.icon_rural);
         } else {
             return resources.getString(R.string.icon_town);
         }
     }
 
+    @JsonIgnore
     public String getMultiCampusIcon(Resources resources) {
-        if (mNumberOfBranches > 1) {
+        if (numberOfBranches > 1) {
             return resources.getString(R.string.icon_multi_campus);
         } else {
             return "";
         }
     }
 
-    public boolean isMultiCampus() {
-        return (mCarnegieBasicCode == 5 | mCarnegieBasicCode == 7 | mNumberOfBranches > 1);
-    }
-
-    public void setLatLng(LatLng latLng) {
-        mLatLng = latLng;
-    }
-
-    public LatLng getLatLng() {
-        return mLatLng;
-    }
 }

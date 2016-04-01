@@ -24,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.parceler.Parcels;
@@ -94,7 +95,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v == mWebsiteIcon) {
-            Uri website = Uri.parse("http://" + mCollege.getMainUrl());
+            Uri website = Uri.parse("http://" + mCollege.getCollegeMainUrl());
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
             if (isSafe(intent)) {
                 startActivity(intent);
@@ -106,7 +107,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
                 startActivity(intent);
             }
         } else if (v == mSaveCollegeButton) {
-            mFirebaseRef.child("savedcolleges/" + mCurrentUser + "/" + mCollege.getName()).setValue(mCollege);
+            mFirebaseRef.child("savedcolleges/" + mCurrentUser + "/" + mCollege.getId()).setValue(mCollege);
             Toast.makeText(getContext(), "Saved " + mCollege.getName(), Toast.LENGTH_LONG).show();
         }
     }
@@ -126,13 +127,14 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
 
                 MapsInitializer.initialize(getActivity());
 
-                if (mCollege.getLatLng() != null) {
+                if (mCollege.getLat() != null && mCollege.getLng() != null ) {
                     //add marker for college
+                    LatLng latLng = new LatLng(mCollege.getLat(), mCollege.getLng());
                     googleMap.addMarker(new MarkerOptions()
-                            .position(mCollege.getLatLng()).title(mCollege.getName()));
+                            .position(latLng).title(mCollege.getName()));
 
                     //center map on marker
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mCollege.getLatLng(), 10);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
                     googleMap.moveCamera(cameraUpdate);
                 }
             }

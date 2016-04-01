@@ -3,11 +3,11 @@
     package="com.epicodus.ccnearme">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:allowBackup="true"
         android:name=".CollegeApplication"
+        android:allowBackup="true"
         android:icon="@drawable/graduation_cap"
         android:label="@string/app_name"
         android:logo="@drawable/graduation_cap"
@@ -41,18 +41,31 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
         </activity>
-        <activity android:name=".ui.CollegeDetailActivity"></activity>
+        <activity android:name=".ui.CollegeDetailActivity" />
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/GOOGLE_MAPS_KEY"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/GOOGLE_MAPS_KEY" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name=".ui.SavedCollegeListActivity"
+            android:label="@string/title_activity_saved"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -6,6 +6,10 @@
             android:id="@+id/nav_about"
             android:icon="@android:drawable/ic_dialog_info"
             android:title="About" />
+        <item
+            android:id="@+id/nav_saved"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Saved Colleges" />
 
     </group>
 

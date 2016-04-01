@@ -21,7 +21,7 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CollegeListAdapter extends RecyclerView.Adapter<CollegeListAdapter.CollegeListViewHolder> {
+public class CollegeListAdapter extends RecyclerView.Adapter<CollegeListViewHolder> {
     private ArrayList<College> mColleges = new ArrayList<>();
     private Context mContext;
 
@@ -33,7 +33,7 @@ public class CollegeListAdapter extends RecyclerView.Adapter<CollegeListAdapter.
     @Override
     public CollegeListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.college_list_item, parent, false);
-        CollegeListViewHolder viewHolder = new CollegeListViewHolder(view);
+        CollegeListViewHolder viewHolder = new CollegeListViewHolder(view, mColleges);
         return viewHolder;
     }
 
@@ -45,54 +45,6 @@ public class CollegeListAdapter extends RecyclerView.Adapter<CollegeListAdapter.
     @Override
     public int getItemCount() {
         return mColleges.size();
-    }
-
-    public class CollegeListViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.collegeNameTextView) TextView mCollegeNameTextView;
-        @Bind(R.id.collegeCityTextView) TextView mCollegeCityTextView;
-        @Bind(R.id.publicPrivateIcon) TextView mOwnershipIcon;
-        @Bind(R.id.publicPrivateIconLabel) TextView mOwnershipLabel;
-        @Bind(R.id.profitNonprofitIcon) TextView mProfitNonprofit;
-        @Bind(R.id.profitNonprofitIconLabel) TextView mProfitNonProfitLabel;
-        @Bind(R.id.urbanRuralIcon) TextView mUrbanRural;
-        @Bind(R.id.urbanRuralIconLabel) TextView mUrbanRuralLabel;
-        @Bind(R.id.numberCampusesIcon) TextView mNumberCampuses;
-        @Bind(R.id.numberCampusesIconLabel) TextView mNumberCampusesLabel;
-        private Context mContext;
-
-        public CollegeListViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            mContext = itemView.getContext();
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int itemPosition = getLayoutPosition();
-                    Intent intent = new Intent(mContext, CollegeDetailActivity.class);
-                    intent.putExtra("position", itemPosition + "");
-                    intent.putExtra("colleges", Parcels.wrap(mColleges));
-                    mContext.startActivity(intent);
-                }
-            });
-        }
-
-        public void bindCollege(College college) {
-            Resources res = mContext.getResources();
-
-            mCollegeNameTextView.setText(college.getName());
-            mCollegeCityTextView.setText(String.format(Locale.US, res.getString(R.string.city_state), college.getCity(), college.getState()));
-            mOwnershipIcon.setText(college.getOwnershipIcon(res));
-            mOwnershipLabel.setText(college.getOwnershipText());
-            mProfitNonprofit.setText(college.getProfitStatusIcon(res));
-            mProfitNonProfitLabel.setText(college.getProfitStatusText());
-            mUrbanRural.setText(college.getLocaleIcon(res));
-            mUrbanRuralLabel.setText(college.getLocaleText());
-
-            if (!college.isMultiCampus()) {
-                mNumberCampuses.setVisibility(View.INVISIBLE);
-                mNumberCampusesLabel.setVisibility(View.INVISIBLE);
-            }
-        }
     }
 
 }

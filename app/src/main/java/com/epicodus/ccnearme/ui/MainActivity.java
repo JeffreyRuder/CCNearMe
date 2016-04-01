@@ -169,7 +169,9 @@ public class MainActivity extends FirebaseLoginBaseActivity
         if (id == R.id.nav_about) {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
-
+        } else if (id == R.id.nav_saved) {
+            Intent intent = new Intent(MainActivity.this, SavedCollegeListActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_public || id == R.id.nav_private) {
             if (item.isChecked()) {
                 item.setIcon(R.drawable.ic_thumb_down_black_24dp);
@@ -178,11 +180,9 @@ public class MainActivity extends FirebaseLoginBaseActivity
                 item.setIcon(R.drawable.ic_thumb_up_black_24dp);
                 item.setChecked(true);
             }
-            //TODO do something to persist this across activities
             return true;
-
+            //TODO do something to persist this across activities
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -56,7 +56,9 @@ public class CollegeListActivity extends AppCompatActivity implements View.OnCli
         mCollegeRecyclerView.setHasFixedSize(true);
         mCollegeRecyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), R.drawable.divider_shadow));
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
