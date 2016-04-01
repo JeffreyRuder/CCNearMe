@@ -11,13 +11,6 @@
         android:layout_height="match_parent"
         >
 
-        <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="220dp"-->
-            <!--android:id="@+id/staticMapView"-->
-            <!--android:scaleType="centerCrop"-->
-            <!--android:text="Embed Google Map Fragment Here?" />-->
-
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"

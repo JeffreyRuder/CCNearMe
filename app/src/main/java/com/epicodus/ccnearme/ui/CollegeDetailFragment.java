@@ -1,37 +1,30 @@
 package com.epicodus.ccnearme.ui;
 
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.epicodus.ccnearme.CollegeApplication;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
-import com.epicodus.ccnearme.services.GeolocateService;
 import com.epicodus.ccnearme.views.FontAwesomeIconTextView;
+import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
@@ -53,6 +46,8 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     @Bind(R.id.mapView) MapView mMapView;
 
     private College mCollege;
+    private Firebase mFirebaseRef;
+    private String mCurrentUser;
 
     public static CollegeDetailFragment newInstance(College college) {
         CollegeDetailFragment collegeDetailFragment = new CollegeDetailFragment();
@@ -80,10 +75,15 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         View view = inflater.inflate(R.layout.fragment_college_detail, container, false);
         ButterKnife.bind(this, view);
 
+        mFirebaseRef = CollegeApplication.getAppInstance().getFirebaseRef();
+        mCurrentUser = mFirebaseRef.getAuth().getUid();
+
         mCollegeNameTextView.setText(mCollege.getName());
         mCollegeLocationTextView.setText(String.format(Locale.US, getString(R.string.city_state_zip), mCollege.getCity(), mCollege.getState(), mCollege.getZip()));
+
         mWebsiteIcon.setOnClickListener(this);
         mPriceCalculatorIcon.setOnClickListener(this);
+        mSaveCollegeButton.setOnClickListener(this);
 
         mMapView.onCreate(savedInstanceState);
         initializeGoogleMap();
@@ -95,18 +95,19 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         if (v == mWebsiteIcon) {
             Uri website = Uri.parse("http://" + mCollege.getMainUrl());
-            Log.v("SITE", website.toString());
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
             if (isSafe(intent)) {
                 startActivity(intent);
             }
         } else if (v == mPriceCalculatorIcon) {
             Uri website = Uri.parse("http://" + mCollege.getPriceCalculatorUrl());
-            Log.v("SITE", website.toString());
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
             if (isSafe(intent)) {
                 startActivity(intent);
             }
+        } else if (v == mSaveCollegeButton) {
+            mFirebaseRef.child("savedcolleges/" + mCurrentUser + "/" + mCollege.getName()).setValue(mCollege);
+            Toast.makeText(getContext(), "Saved " + mCollege.getName(), Toast.LENGTH_LONG).show();
         }
     }
 
