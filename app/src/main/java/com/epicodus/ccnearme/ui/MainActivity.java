@@ -1,15 +1,11 @@
 package com.epicodus.ccnearme.ui;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,7 +26,6 @@ import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.CollegeScorecardService;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
-import com.firebase.client.utilities.Base64;
 import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
@@ -39,8 +34,6 @@ import com.squareup.picasso.Picasso;
 import org.parceler.Parcels;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -301,11 +294,5 @@ public class MainActivity extends FirebaseLoginBaseActivity
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-
-
-
-
-
-
 
 }

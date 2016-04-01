@@ -1,11 +1,14 @@
 package com.epicodus.ccnearme.ui;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +20,7 @@ import android.widget.TextView;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.GeolocateService;
-import com.epicodus.ccnearme.services.StaticMapsService;
 import com.epicodus.ccnearme.views.FontAwesomeIconTextView;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,18 +35,14 @@ import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+
 
 public class CollegeDetailFragment extends Fragment implements View.OnClickListener {
-//    @Bind(R.id.staticMapView) ImageView mStaticMapView;
     @Bind(R.id.collegeNameTextView) TextView mCollegeNameTextView;
     @Bind(R.id.collegeLocationTextView) TextView mCollegeLocationTextView;
     @Bind(R.id.saveCollegeButton) Button mSaveCollegeButton;
@@ -56,7 +53,6 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     @Bind(R.id.mapView) MapView mMapView;
 
     private College mCollege;
-    GoogleMap mMap = null;
 
     public static CollegeDetailFragment newInstance(College college) {
         CollegeDetailFragment collegeDetailFragment = new CollegeDetailFragment();
@@ -92,11 +88,6 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         mMapView.onCreate(savedInstanceState);
         initializeGoogleMap();
 
-//        Picasso.with(view.getContext())
-//                .load(StaticMapsService.buildImageURL(mCollege, getString(R.string.GOOGLE_MAPS_KEY)))
-//                .fit()
-//                .centerCrop()
-//                .into(mStaticMapView);
         return view;
     }
 
@@ -126,21 +117,24 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     }
 
     private void initializeGoogleMap() {
-        mMap = mMapView.getMap();
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.setMyLocationEnabled(true);
-        MapsInitializer.initialize(this.getActivity());
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                googleMap.setMyLocationEnabled(true);
 
-        if (mCollege.getLatLng() != null) {
-            //add marker for college
-            mMap.addMarker(new MarkerOptions()
-                    .position(mCollege.getLatLng()).title(mCollege.getName()));
+                MapsInitializer.initialize(getActivity());
 
-            //center map on marker
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mCollege.getLatLng(), 10);
-            mMap.moveCamera(cameraUpdate);
-        }
+                if (mCollege.getLatLng() != null) {
+                    //add marker for college
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(mCollege.getLatLng()).title(mCollege.getName()));
 
+                    //center map on marker
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mCollege.getLatLng(), 10);
+                    googleMap.moveCamera(cameraUpdate);
+                }
+            }
+        });
     }
-
 }
