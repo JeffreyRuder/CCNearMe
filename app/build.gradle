@@ -31,11 +31,14 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.2.1'
     compile 'com.android.support:support-v4:23.2.1'
 
+    //Play Services for Google Maps
     compile 'com.google.android.gms:play-services:8.4.0'
 
+    //Login Providers
     compile 'com.google.android.gms:play-services-auth:8.3.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
 
-
+    //Firebase and Firebase UI
     compile 'com.firebase:firebase-client-android:2.3.1'
     compile 'com.firebaseui:firebase-ui:0.3.1'
 

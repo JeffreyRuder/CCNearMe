@@ -1,9 +1,13 @@
 package com.epicodus.ccnearme.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -26,6 +30,7 @@ import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.CollegeScorecardService;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
+import com.firebase.client.utilities.Base64;
 import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
@@ -34,6 +39,8 @@ import com.squareup.picasso.Picasso;
 import org.parceler.Parcels;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,8 +68,10 @@ public class MainActivity extends FirebaseLoginBaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         ButterKnife.bind(this);
 
         getColleges("97218", 20);
@@ -84,16 +93,17 @@ public class MainActivity extends FirebaseLoginBaseActivity
 
         mFirebaseRef = CollegeApplication.getAppInstance().getFirebaseRef();
 
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         // All providers are optional! Remove any you don't want.
-//        setEnabledAuthProvider(AuthProviderType.FACEBOOK);
+        setEnabledAuthProvider(AuthProviderType.FACEBOOK);
 //        setEnabledAuthProvider(AuthProviderType.TWITTER);
         setEnabledAuthProvider(AuthProviderType.GOOGLE);
-        setEnabledAuthProvider(AuthProviderType.PASSWORD);
+//        setEnabledAuthProvider(AuthProviderType.PASSWORD);
         checkForUserAuthentication();
 
     }
@@ -132,13 +142,12 @@ public class MainActivity extends FirebaseLoginBaseActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_logout: logout();
+                return true;
+            case R.id.action_login: showFirebaseLoginPrompt();
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -213,27 +222,19 @@ public class MainActivity extends FirebaseLoginBaseActivity
         Toast errorToast = Toast.makeText(this, "Unable to connect to the sign-in provider.", Toast.LENGTH_LONG);
         errorToast.setGravity(Gravity.CENTER, 0, 0);
         errorToast.show();
+        dismissFirebaseLoginPrompt();
     }
 
     @Override
     public void onFirebaseLoginUserError(FirebaseLoginError firebaseError) {
         Log.e(TAG, "Login user error: " + firebaseError.toString());
-        Toast errorToast = Toast.makeText(this, "Error logging in. Please verify your login information.", Toast.LENGTH_LONG);
-        errorToast.setGravity(Gravity.CENTER, 0, 0);
-        errorToast.show();
+        showErrorDialog("Failed to login. Please double-check your login information.");
+        dismissFirebaseLoginPrompt();
     }
 
     @Override
     public void onFirebaseLoggedIn(AuthData authData) {
-        Map<String, String> map = new HashMap<>();
-        map.put("provider", authData.getProvider());
-        if (authData.getProviderData().containsKey("displayName")) {
-            map.put("displayName", authData.getProviderData().get("displayName").toString());
-        }
-        if (authData.getProviderData().containsKey("email")) {
-            map.put("email", authData.getProviderData().get("email").toString());
-        }
-        mFirebaseRef.child("users").child(authData.getUid()).setValue(map);
+        saveUserToFireBase(authData);
     }
 
     @Override
@@ -247,6 +248,32 @@ public class MainActivity extends FirebaseLoginBaseActivity
             showFirebaseLoginPrompt();
         }
     }
+
+    private void saveUserToFireBase(AuthData authData) {
+        Map<String, String> map = new HashMap<>();
+        map.put("provider", authData.getProvider());
+        if (authData.getProviderData().containsKey("displayName")) {
+            map.put("displayName", authData.getProviderData().get("displayName").toString());
+        }
+        if (authData.getProviderData().containsKey("email")) {
+            map.put("email", authData.getProviderData().get("email").toString());
+        }
+        mFirebaseRef.child("users").child(authData.getUid()).setValue(map);
+    }
+
+    private void showErrorDialog(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+
+
+
+
 
 
 }
