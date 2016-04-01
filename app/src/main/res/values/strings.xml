@@ -3,6 +3,8 @@
     <string name="app_tag">Highlighting Community Colleges</string>
     <string name="powered_by_tag">Powered by College Scorecard Data</string>
 
+    <string name="firebase_url">https://collegenearme.firebaseio.com</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>

@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_id": "collegenearme",
+    "project_number": "877798671310",
+    "name": "CollegeNearMe"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877798671310:android:dfe6b9a2bb9de02f",
+        "client_id": "android:com.epicodus.ccnearme",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.epicodus.ccnearme",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "877798671310-hgke8k1vu9splarjfsf75kvtg8g356gd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.epicodus.ccnearme",
+            "certificate_hash": "E0107FC862CEEF143398E34361B14FA8EFB75747"
+          }
+        },
+        {
+          "client_id": "877798671310-jj8o1ohp9t5o555q3g5s45a486ns1ghs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

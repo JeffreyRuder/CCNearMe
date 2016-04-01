@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,17 +18,25 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.epicodus.ccnearme.CollegeApplication;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.CollegeScorecardService;
-import com.epicodus.ccnearme.services.GeolocateService;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.ui.auth.core.AuthProviderType;
+import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
+import com.firebase.ui.auth.core.FirebaseLoginError;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,14 +44,18 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends FirebaseLoginBaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    private final String TAG = this.getClass().getSimpleName();
+
     @Bind(R.id.background_image) ImageView mBackgroundImage;
     @Bind(R.id.beginButton) Button mBeginButton;
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
     @Bind(R.id.collegesNearYouNumberTextView) TextView mCollegesNearYouNumberTextView;
 
     private ArrayList<College> mNearbyColleges = new ArrayList<>();
+    private Firebase mFirebaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +82,26 @@ public class MainActivity extends AppCompatActivity
 
         Picasso.with(this).load(R.drawable.background).fit().centerCrop().into(mBackgroundImage);
 
+        mFirebaseRef = CollegeApplication.getAppInstance().getFirebaseRef();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // All providers are optional! Remove any you don't want.
+//        setEnabledAuthProvider(AuthProviderType.FACEBOOK);
+//        setEnabledAuthProvider(AuthProviderType.TWITTER);
+        setEnabledAuthProvider(AuthProviderType.GOOGLE);
+        setEnabledAuthProvider(AuthProviderType.PASSWORD);
+        checkForUserAuthentication();
+
     }
 
     @Override
     public void onClick(View view) {
         if (view == mBeginButton) {
-            Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+            Intent intent = new Intent(MainActivity.this, CollegeListActivity.class);
             intent.putExtra("colleges", Parcels.wrap(mNearbyColleges));
             startActivity(intent);
         } else if (view == mFloatingActionButton) {
@@ -170,4 +198,55 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
+
+    //LOGIN / LOGOUT METHODS
+
+    @Override
+    public Firebase getFirebaseRef() {
+        return CollegeApplication.getAppInstance().getFirebaseRef();
+    }
+
+    @Override
+    public void onFirebaseLoginProviderError(FirebaseLoginError firebaseError) {
+        Log.e(TAG, "Login provider error: " + firebaseError.toString());
+        Toast errorToast = Toast.makeText(this, "Unable to connect to the sign-in provider.", Toast.LENGTH_LONG);
+        errorToast.setGravity(Gravity.CENTER, 0, 0);
+        errorToast.show();
+    }
+
+    @Override
+    public void onFirebaseLoginUserError(FirebaseLoginError firebaseError) {
+        Log.e(TAG, "Login user error: " + firebaseError.toString());
+        Toast errorToast = Toast.makeText(this, "Error logging in. Please verify your login information.", Toast.LENGTH_LONG);
+        errorToast.setGravity(Gravity.CENTER, 0, 0);
+        errorToast.show();
+    }
+
+    @Override
+    public void onFirebaseLoggedIn(AuthData authData) {
+        Map<String, String> map = new HashMap<>();
+        map.put("provider", authData.getProvider());
+        if (authData.getProviderData().containsKey("displayName")) {
+            map.put("displayName", authData.getProviderData().get("displayName").toString());
+        }
+        if (authData.getProviderData().containsKey("email")) {
+            map.put("email", authData.getProviderData().get("email").toString());
+        }
+        mFirebaseRef.child("users").child(authData.getUid()).setValue(map);
+    }
+
+    @Override
+    public void onFirebaseLoggedOut() {
+        // TODO: Handle logout
+    }
+
+    private void checkForUserAuthentication() {
+        AuthData authData = mFirebaseRef.getAuth();
+        if (authData == null) {
+            showFirebaseLoginPrompt();
+        }
+    }
+
+
 }

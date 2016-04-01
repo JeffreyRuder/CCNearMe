@@ -26,7 +26,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class ResultsActivity extends AppCompatActivity implements View.OnClickListener {
+public class CollegeListActivity extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.recyclerView) RecyclerView mCollegeRecyclerView;
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
 
@@ -51,7 +51,7 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         mAdapter = new CollegeListAdapter(getApplicationContext(), mNearbyColleges);
         mCollegeRecyclerView.setAdapter(mAdapter);
         RecyclerView.LayoutManager layoutManager =
-                new LinearLayoutManager(ResultsActivity.this);
+                new LinearLayoutManager(CollegeListActivity.this);
         mCollegeRecyclerView.setLayoutManager(layoutManager);
         mCollegeRecyclerView.setHasFixedSize(true);
         mCollegeRecyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), R.drawable.divider_shadow));
