@@ -64,6 +64,9 @@ public class MainActivity extends FirebaseLoginBaseActivity
     private ArrayList<College> mNearbyColleges = new ArrayList<>();
     private Firebase mFirebaseRef;
 
+    private MenuItem mLoginOption;
+    private MenuItem mLogoutOption;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +106,7 @@ public class MainActivity extends FirebaseLoginBaseActivity
         setEnabledAuthProvider(AuthProviderType.FACEBOOK);
 //        setEnabledAuthProvider(AuthProviderType.TWITTER);
         setEnabledAuthProvider(AuthProviderType.GOOGLE);
-//        setEnabledAuthProvider(AuthProviderType.PASSWORD);
+        setEnabledAuthProvider(AuthProviderType.PASSWORD);
         checkForUserAuthentication();
 
     }
@@ -134,6 +137,17 @@ public class MainActivity extends FirebaseLoginBaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        //Show only appropriate login/logout options for authentication state.
+        mLoginOption = menu.findItem(R.id.action_login);
+        mLogoutOption = menu.findItem(R.id.action_logout);
+        if (mFirebaseRef.getAuth() != null) {
+            mLogoutOption.setVisible(true);
+            mLoginOption.setVisible(false);
+        } else {
+            mLogoutOption.setVisible(false);
+            mLoginOption.setVisible(true);
+        }
         return true;
     }
 
@@ -143,9 +157,11 @@ public class MainActivity extends FirebaseLoginBaseActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_logout: logout();
+            case R.id.action_logout:
+                logout();
                 return true;
-            case R.id.action_login: showFirebaseLoginPrompt();
+            case R.id.action_login:
+                showFirebaseLoginPrompt();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -212,6 +228,12 @@ public class MainActivity extends FirebaseLoginBaseActivity
     //LOGIN / LOGOUT METHODS
 
     @Override
+    public void showFirebaseLoginPrompt() {
+        super.showFirebaseLoginPrompt();
+
+    }
+
+    @Override
     public Firebase getFirebaseRef() {
         return CollegeApplication.getAppInstance().getFirebaseRef();
     }
@@ -219,9 +241,7 @@ public class MainActivity extends FirebaseLoginBaseActivity
     @Override
     public void onFirebaseLoginProviderError(FirebaseLoginError firebaseError) {
         Log.e(TAG, "Login provider error: " + firebaseError.toString());
-        Toast errorToast = Toast.makeText(this, "Unable to connect to the sign-in provider.", Toast.LENGTH_LONG);
-        errorToast.setGravity(Gravity.CENTER, 0, 0);
-        errorToast.show();
+        showErrorDialog("Unable to connect to the login provider.");
         dismissFirebaseLoginPrompt();
     }
 
@@ -235,11 +255,20 @@ public class MainActivity extends FirebaseLoginBaseActivity
     @Override
     public void onFirebaseLoggedIn(AuthData authData) {
         saveUserToFireBase(authData);
+        if (mLoginOption != null && mLogoutOption != null) {
+            mLogoutOption.setVisible(true);
+            mLoginOption.setVisible(false);
+        }
     }
 
     @Override
     public void onFirebaseLoggedOut() {
-        // TODO: Handle logout
+        Toast toast = Toast.makeText(this, "Logged out.", Toast.LENGTH_SHORT);
+        toast.show();
+        if (mLoginOption != null && mLogoutOption != null) {
+            mLogoutOption.setVisible(false);
+            mLoginOption.setVisible(true);
+        }
     }
 
     private void checkForUserAuthentication() {
@@ -257,6 +286,9 @@ public class MainActivity extends FirebaseLoginBaseActivity
         }
         if (authData.getProviderData().containsKey("email")) {
             map.put("email", authData.getProviderData().get("email").toString());
+        }
+        if (authData.getProviderData().containsKey("profileImageURL")) {
+            map.put("profileImageURL", authData.getProviderData().get("profileImageURL").toString());
         }
         mFirebaseRef.child("users").child(authData.getUid()).setValue(map);
     }
