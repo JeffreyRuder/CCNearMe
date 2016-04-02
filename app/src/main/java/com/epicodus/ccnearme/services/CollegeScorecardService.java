@@ -67,7 +67,6 @@ public class CollegeScorecardService {
         urlBuilder.addQueryParameter("_per_page", RESULTS_PER_PAGE);
         urlBuilder.addQueryParameter("api_key", API_KEY);
         String url = urlBuilder.build().toString();
-        Log.d("URL", url);
 
         Request request = new Request.Builder().url(url).build();
         Call call = client.newCall(request);

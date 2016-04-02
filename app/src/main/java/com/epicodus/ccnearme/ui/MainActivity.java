@@ -11,11 +11,11 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +53,8 @@ public class MainActivity extends FirebaseLoginBaseActivity
     @Bind(R.id.beginButton) Button mBeginButton;
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
     @Bind(R.id.collegesNearYouNumberTextView) TextView mCollegesNearYouNumberTextView;
+    @Bind(R.id.zipInput) EditText mZipInput;
+    @Bind(R.id.zipSearchButton) Button mZipSearchButton;
 
     private ArrayList<College> mNearbyColleges = new ArrayList<>();
     private Firebase mFirebaseRef;
@@ -70,11 +72,12 @@ public class MainActivity extends FirebaseLoginBaseActivity
 
         ButterKnife.bind(this);
 
-        getColleges("97218", 20);
+        getNearbyColleges("97218", 20);
 
         mFloatingActionButton.setOnClickListener(this);
         mBeginButton.setOnClickListener(this);
         mBeginButton.setEnabled(false);
+        mZipSearchButton.setOnClickListener(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -110,7 +113,14 @@ public class MainActivity extends FirebaseLoginBaseActivity
             Intent intent = new Intent(MainActivity.this, CollegeListActivity.class);
             intent.putExtra("colleges", Parcels.wrap(mNearbyColleges));
             startActivity(intent);
-        } else if (view == mFloatingActionButton) {
+        } else if (view == mZipSearchButton) {
+            String input = mZipInput.getText().toString().trim();
+            if (!input.isEmpty()) {
+                mZipInput.setText("");
+                getCollegesByZip(input);
+            }
+        }
+        else if (view == mFloatingActionButton) {
             Snackbar.make(view, "Do something here", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
@@ -188,9 +198,8 @@ public class MainActivity extends FirebaseLoginBaseActivity
         return true;
     }
 
-    private void getColleges(String location, int searchRange) {
+    private void getNearbyColleges(String location, int searchRange) {
         final CollegeScorecardService collegeScorecardService = new CollegeScorecardService(this);
-
         collegeScorecardService.findColleges(location, searchRange, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -204,7 +213,6 @@ public class MainActivity extends FirebaseLoginBaseActivity
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         if (mNearbyColleges.size() > 0) {
                             mCollegesNearYouNumberTextView.setText(String.format(getString(R.string.main_activity_near_you), mNearbyColleges.size()));
                         } else {
@@ -217,13 +225,30 @@ public class MainActivity extends FirebaseLoginBaseActivity
         });
     }
 
+    private void getCollegesByZip(String zip) {
+        final CollegeScorecardService collegeScorecardService = new CollegeScorecardService(this);
+        collegeScorecardService.findColleges(zip, 20, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                mNearbyColleges = collegeScorecardService.processResults(response);
+                Intent intent = new Intent(MainActivity.this, CollegeListActivity.class);
+                intent.putExtra("colleges", Parcels.wrap(mNearbyColleges));
+                startActivity(intent);
+            }
+        });
+    }
 
     //LOGIN / LOGOUT METHODS
 
     @Override
     public void showFirebaseLoginPrompt() {
         super.showFirebaseLoginPrompt();
-
+        //TODO hide input for email and password until registration is implemented
     }
 
     @Override
