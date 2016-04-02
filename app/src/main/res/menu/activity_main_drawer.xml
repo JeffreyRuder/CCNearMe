@@ -16,15 +16,13 @@
     <item android:title="Search Settings" >
         <menu android:checkableBehavior="all">
             <item
-                android:id="@+id/nav_public"
-                android:icon="@drawable/ic_thumb_up_black_24dp"
-                android:checked="true"
-                android:title="Include Public Colleges" />
-            <item
                 android:id="@+id/nav_private"
-                android:icon="@drawable/ic_thumb_up_black_24dp"
-                android:checked="true"
+                android:icon="@drawable/ic_thumb_down_black_24dp"
                 android:title="Include Private Colleges" />
+            <item
+                android:id="@+id/nav_for_profit"
+                android:icon="@drawable/ic_thumb_down_black_24dp"
+                android:title="Include For-Profit Colleges" />
         </menu>
     </item>
 

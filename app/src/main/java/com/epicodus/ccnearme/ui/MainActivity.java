@@ -1,6 +1,8 @@
 package com.epicodus.ccnearme.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -56,6 +58,11 @@ public class MainActivity extends FirebaseLoginBaseActivity
     @Bind(R.id.zipInput) EditText mZipInput;
     @Bind(R.id.zipSearchButton) Button mZipSearchButton;
 
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
+    private boolean mIncludePrivate;
+    private boolean mIncludeForProfit;
+
     private ArrayList<College> mNearbyColleges = new ArrayList<>();
     private Firebase mFirebaseRef;
 
@@ -66,7 +73,6 @@ public class MainActivity extends FirebaseLoginBaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -85,14 +91,11 @@ public class MainActivity extends FirebaseLoginBaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         Picasso.with(this).load(R.drawable.background).fit().centerCrop().into(mBackgroundImage);
 
         mFirebaseRef = CollegeApplication.getAppInstance().getFirebaseRef();
-
-
+        initializeSharedPreferences();
+        initializeNavigationDrawer();
     }
 
     @Override
@@ -182,16 +185,32 @@ public class MainActivity extends FirebaseLoginBaseActivity
         } else if (id == R.id.nav_saved) {
             Intent intent = new Intent(MainActivity.this, SavedCollegeListActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_public || id == R.id.nav_private) {
+        } else if (id == R.id.nav_private) {
             if (item.isChecked()) {
                 item.setIcon(R.drawable.ic_thumb_down_black_24dp);
                 item.setChecked(false);
+                mEditor.putBoolean("include_private", false).commit();
+                getNearbyColleges("97218", 20);
             } else {
                 item.setIcon(R.drawable.ic_thumb_up_black_24dp);
                 item.setChecked(true);
+                mEditor.putBoolean("include_private", true).commit();
+                getNearbyColleges("97218", 20);
             }
             return true;
-            //TODO do something to persist this across activities
+        } else if (id == R.id.nav_for_profit) {
+            if (item.isChecked()) {
+                item.setIcon(R.drawable.ic_thumb_down_black_24dp);
+                item.setChecked(false);
+                mEditor.putBoolean("include_for_profit", false).commit();
+                getNearbyColleges("97218", 20);
+            } else {
+                item.setIcon(R.drawable.ic_thumb_up_black_24dp);
+                item.setChecked(true);
+                mEditor.putBoolean("include_for_profit", true).commit();
+                getNearbyColleges("97218", 20);
+            }
+            return true;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -209,7 +228,6 @@ public class MainActivity extends FirebaseLoginBaseActivity
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 mNearbyColleges = collegeScorecardService.processResults(response);
-
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -241,6 +259,28 @@ public class MainActivity extends FirebaseLoginBaseActivity
                 startActivity(intent);
             }
         });
+    }
+
+    private void initializeSharedPreferences() {
+        mSharedPreferences = this.getSharedPreferences(getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
+        mEditor = mSharedPreferences.edit();
+        mIncludePrivate = mSharedPreferences.getBoolean("include_private", true);
+        mIncludeForProfit = mSharedPreferences.getBoolean("include_for_profit", true);
+    }
+
+    private void initializeNavigationDrawer() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        if (mIncludeForProfit) {
+            MenuItem item = navigationView.getMenu().findItem(R.id.nav_for_profit);
+            item.setChecked(true);
+            item.setIcon(R.drawable.ic_thumb_up_black_24dp);
+        }
+        if (mIncludePrivate) {
+            MenuItem item = navigationView.getMenu().findItem(R.id.nav_private);
+            item.setChecked(true);
+            item.setIcon(R.drawable.ic_thumb_up_black_24dp);
+        }
     }
 
     //LOGIN / LOGOUT METHODS

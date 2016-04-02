@@ -1,6 +1,7 @@
 package com.epicodus.ccnearme.services;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.epicodus.ccnearme.R;
@@ -34,10 +35,17 @@ public class CollegeScorecardService {
     private static final String RESULTS_PER_PAGE = "50";
     private static final String CARNEGIE_EXCLUDE_PRIVATE = "1,2,3,4,5,6,7,8,9,12";
     private static final String CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24";
+    private boolean mIncludePrivate;
+    private boolean mIncludeForProfit;
+    private SharedPreferences mSharedPreferences;
 
     public CollegeScorecardService(Context context) {
         mContext = context;
         API_KEY = mContext.getString(R.string.DATA_GOV_KEY);
+        mSharedPreferences = mContext.getSharedPreferences(mContext.getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
+        mIncludePrivate = mSharedPreferences.getBoolean("include_private", true);
+        mIncludeForProfit = mSharedPreferences.getBoolean("include_for_profit", true);
+        Log.d("getting shared prefs", mIncludePrivate + " " + mIncludeForProfit);
     }
 
     public void findColleges(String zip, int searchRange, Callback callback) {

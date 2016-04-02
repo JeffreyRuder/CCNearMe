@@ -23,6 +23,8 @@
     <string name="title_activity_saved">My Saved Colleges</string>
 
     <string name="about_us_main">CC Near Me provides students and their families accurate, relevant information about nearby community colleges.\n\nCC Near Me adapts Department of Education data into a form that makes sense for community colleges, taking their students and missions into account.</string>
-    <string name="main_activity_none_nearby">There are no nearby community colleges.</string>
+    <string name="main_activity_none_nearby">There are no nearby colleges.</string>
+
+    <string name="shared_preferences_file">com.epicodus.ccnearme.PREFERENCE_FILE_KEY</string>
 
 </resources>
