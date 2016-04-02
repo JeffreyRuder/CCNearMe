@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,8 +32,8 @@ public class CollegeScorecardService {
     private final String API_KEY;
     private static final String API_ENDPOINT = "https://api.data.gov/ed/collegescorecard/v1/schools.json";
     private static final String RESULTS_PER_PAGE = "50";
-    private static final String CARNEGIE_EXCLUDE_PRIVATE = "1,2,3,4,5,6,7,8,9,12";
-    private static final String CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24";
+    private static final String INCLUDED_CARNEGIE_CLASSIFICATIONS = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24";
+    private final String INCLUDED_OWNERSHIPS;
     private boolean mIncludePrivate;
     private boolean mIncludeForProfit;
     private SharedPreferences mSharedPreferences;
@@ -45,7 +44,16 @@ public class CollegeScorecardService {
         mSharedPreferences = mContext.getSharedPreferences(mContext.getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
         mIncludePrivate = mSharedPreferences.getBoolean("include_private", true);
         mIncludeForProfit = mSharedPreferences.getBoolean("include_for_profit", true);
-        Log.d("getting shared prefs", mIncludePrivate + " " + mIncludeForProfit);
+
+        if (mIncludeForProfit && mIncludePrivate) {
+            INCLUDED_OWNERSHIPS = "1,2,3";
+        } else if (mIncludeForProfit) {
+            INCLUDED_OWNERSHIPS = "1,3";
+        } else if (mIncludePrivate) {
+            INCLUDED_OWNERSHIPS = "1,2";
+        } else {
+            INCLUDED_OWNERSHIPS = "1";
+        }
     }
 
     public void findColleges(String zip, int searchRange, Callback callback) {
@@ -65,13 +73,22 @@ public class CollegeScorecardService {
                 "school.school_url";
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(API_ENDPOINT).newBuilder();
-        //check to make sure the school was still enrolling students recently
+
+        //filter results by type of college
+        urlBuilder.addQueryParameter("school.carnegie_basic", INCLUDED_CARNEGIE_CLASSIFICATIONS);
+        urlBuilder.addQueryParameter("school.ownership", INCLUDED_OWNERSHIPS);
+
+        //include only schools enrolling students recently
         urlBuilder.addQueryParameter(threeYearsAgo() + ".student.size__range", "1..");
 
+        //indicate what information we want
         urlBuilder.addQueryParameter("_fields", fieldsToInclude);
-        urlBuilder.addQueryParameter("school.carnegie_basic", CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT);
+
+        //filter results by distance
         urlBuilder.addQueryParameter("_zip", zip);
         urlBuilder.addQueryParameter("_distance", searchRange + "mi");
+
+        //specify remaining parameters
         urlBuilder.addQueryParameter("_per_page", RESULTS_PER_PAGE);
         urlBuilder.addQueryParameter("api_key", API_KEY);
         String url = urlBuilder.build().toString();
