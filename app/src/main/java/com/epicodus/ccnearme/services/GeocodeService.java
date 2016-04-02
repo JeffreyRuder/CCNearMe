@@ -1,10 +1,12 @@
 package com.epicodus.ccnearme.services;
 
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -43,8 +45,6 @@ public class GeocodeService {
 
         String url = urlBuilder.build().toString();
 
-        Log.d("Request for " + college.getName(), url);
-
         Request request = new Request.Builder().url(url).build();
         Call call = client.newCall(request);
         call.enqueue(callback);
@@ -54,12 +54,9 @@ public class GeocodeService {
 
         try {
             String jsonData = response.body().string();
-            Log.d("Successful?", response.isSuccessful() + "");
             if (response.isSuccessful()) {
                 JSONObject responseJSON = new JSONObject(jsonData);
                 JSONArray locationResults = responseJSON.getJSONArray("results");
-                Log.d("Results:", locationResults.getJSONObject(0).getJSONArray("address_components").getJSONObject(0).getString("long_name"));
-
                 Double lat = locationResults.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lat");
                 Double lng = locationResults.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lng");
 
@@ -69,5 +66,33 @@ public class GeocodeService {
         } catch (IOException | JSONException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public void getZipFromLocation(Location location, Callback callback) {
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://maps.googleapis.com/maps/api/geocode/json").newBuilder();
+        urlBuilder.addQueryParameter("latlng", location.getLatitude() + "," + location.getLongitude());
+        urlBuilder.addQueryParameter("key", API_KEY);
+        String url = urlBuilder.build().toString();
+        Request request = new Request.Builder().url(url).build();
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
+
+    public String processZipResults(Response response) {
+        String zip  = "";
+        try {
+            String jsonData = response.body().string();
+            if (response.isSuccessful()) {
+                JSONObject responseJSON = new JSONObject(jsonData);
+                JSONObject results = responseJSON.getJSONArray("results").getJSONObject(0);
+                JSONArray addressComponents = results.getJSONArray("address_components");
+                JSONObject lastObject = addressComponents.getJSONObject(addressComponents.length() - 1);
+                zip = lastObject.getString("short_name");
+            }
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+        return zip;
     }
 }

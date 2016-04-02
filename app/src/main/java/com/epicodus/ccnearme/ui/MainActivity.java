@@ -3,7 +3,9 @@ package com.epicodus.ccnearme.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -26,11 +28,16 @@ import com.epicodus.ccnearme.CollegeApplication;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.CollegeScorecardService;
+import com.epicodus.ccnearme.services.GeocodeService;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -47,7 +54,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class MainActivity extends FirebaseLoginBaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -65,6 +72,9 @@ public class MainActivity extends FirebaseLoginBaseActivity
 
     private ArrayList<College> mNearbyColleges = new ArrayList<>();
     private Firebase mFirebaseRef;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private String mLastZip;
 
     private MenuItem mLoginOption;
     private MenuItem mLogoutOption;
@@ -77,8 +87,6 @@ public class MainActivity extends FirebaseLoginBaseActivity
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
-
-        getNearbyColleges("97218", 20);
 
         mFloatingActionButton.setOnClickListener(this);
         mBeginButton.setOnClickListener(this);
@@ -96,6 +104,8 @@ public class MainActivity extends FirebaseLoginBaseActivity
         mFirebaseRef = CollegeApplication.getAppInstance().getFirebaseRef();
         initializeSharedPreferences();
         initializeNavigationDrawer();
+        initializeApiClient();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -107,7 +117,15 @@ public class MainActivity extends FirebaseLoginBaseActivity
         setEnabledAuthProvider(AuthProviderType.GOOGLE);
         setEnabledAuthProvider(AuthProviderType.PASSWORD);
         checkForUserAuthentication();
+//        Log.d("LAST ZIP out", "HERE: " + mLastZip);
+//
+//        getNearbyColleges(mLastZip, 20);
+    }
 
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
     }
 
     @Override
@@ -190,12 +208,12 @@ public class MainActivity extends FirebaseLoginBaseActivity
                 item.setIcon(R.drawable.ic_thumb_down_black_24dp);
                 item.setChecked(false);
                 mEditor.putBoolean("include_private", false).commit();
-                getNearbyColleges("97218", 20);
+                getNearbyColleges(mLastZip, 20);
             } else {
                 item.setIcon(R.drawable.ic_thumb_up_black_24dp);
                 item.setChecked(true);
                 mEditor.putBoolean("include_private", true).commit();
-                getNearbyColleges("97218", 20);
+                getNearbyColleges(mLastZip, 20);
             }
             return true;
         } else if (id == R.id.nav_for_profit) {
@@ -203,12 +221,12 @@ public class MainActivity extends FirebaseLoginBaseActivity
                 item.setIcon(R.drawable.ic_thumb_down_black_24dp);
                 item.setChecked(false);
                 mEditor.putBoolean("include_for_profit", false).commit();
-                getNearbyColleges("97218", 20);
+                getNearbyColleges(mLastZip, 20);
             } else {
                 item.setIcon(R.drawable.ic_thumb_up_black_24dp);
                 item.setChecked(true);
                 mEditor.putBoolean("include_for_profit", true).commit();
-                getNearbyColleges("97218", 20);
+                getNearbyColleges(mLastZip, 20);
             }
             return true;
         }
@@ -360,4 +378,44 @@ public class MainActivity extends FirebaseLoginBaseActivity
                 .show();
     }
 
+    private void initializeApiClient() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            final GeocodeService geocodeService = new GeocodeService(this);
+            geocodeService.getZipFromLocation(mLastLocation, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    mLastZip = geocodeService.processZipResults(response);
+                    getNearbyColleges(mLastZip, 20);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        showErrorDialog("Failed to determine your location. Please search by zip code instead.");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        showErrorDialog("Failed to determine your location. Please search by zip code instead.");
+    }
 }

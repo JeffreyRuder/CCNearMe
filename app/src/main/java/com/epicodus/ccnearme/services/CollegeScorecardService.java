@@ -31,7 +31,7 @@ public class CollegeScorecardService {
     private Context mContext;
     private final String API_KEY;
     private static final String API_ENDPOINT = "https://api.data.gov/ed/collegescorecard/v1/schools.json";
-    private static final String RESULTS_PER_PAGE = "50";
+    private static final String RESULTS_PER_PAGE = "100";
     private static final String INCLUDED_CARNEGIE_CLASSIFICATIONS = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24";
     private final String INCLUDED_OWNERSHIPS;
     private boolean mIncludePrivate;
