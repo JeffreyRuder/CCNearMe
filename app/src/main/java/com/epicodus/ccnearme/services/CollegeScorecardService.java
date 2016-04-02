@@ -1,6 +1,7 @@
 package com.epicodus.ccnearme.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
@@ -32,7 +33,7 @@ public class CollegeScorecardService {
     private static final String API_ENDPOINT = "https://api.data.gov/ed/collegescorecard/v1/schools.json";
     private static final String RESULTS_PER_PAGE = "50";
     private static final String CARNEGIE_EXCLUDE_PRIVATE = "1,2,3,4,5,6,7,8,9,12";
-    private static final String CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT = "1,2,3,4,5,6,7,8,9,10,11,12,13,14";
+    private static final String CARNEGIE_INCLUDE_PRIVATE_FOR_PROFIT = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24";
 
     public CollegeScorecardService(Context context) {
         mContext = context;
@@ -66,6 +67,7 @@ public class CollegeScorecardService {
         urlBuilder.addQueryParameter("_per_page", RESULTS_PER_PAGE);
         urlBuilder.addQueryParameter("api_key", API_KEY);
         String url = urlBuilder.build().toString();
+        Log.d("URL", url);
 
         Request request = new Request.Builder().url(url).build();
         Call call = client.newCall(request);

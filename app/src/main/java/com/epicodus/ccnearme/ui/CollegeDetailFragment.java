@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.epicodus.ccnearme.CollegeApplication;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
+import com.epicodus.ccnearme.services.GeocodeService;
 import com.epicodus.ccnearme.views.FontAwesomeIconTextView;
 import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdate;
@@ -29,11 +30,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.parceler.Parcels;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 public class CollegeDetailFragment extends Fragment implements View.OnClickListener {
@@ -49,6 +54,8 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     private College mCollege;
     private Firebase mFirebaseRef;
     private String mCurrentUser;
+
+    private GeocodeService mGeocodeService;
 
     public static CollegeDetailFragment newInstance(College college) {
         CollegeDetailFragment collegeDetailFragment = new CollegeDetailFragment();
@@ -81,6 +88,8 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
 
         mCollegeNameTextView.setText(mCollege.getName());
         mCollegeLocationTextView.setText(String.format(Locale.US, getString(R.string.city_state_zip), mCollege.getCity(), mCollege.getState(), mCollege.getZip()));
+
+        mGeocodeService = new GeocodeService(getContext());
 
         mWebsiteIcon.setOnClickListener(this);
         mPriceCalculatorIcon.setOnClickListener(this);
@@ -119,6 +128,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     }
 
     private void initializeGoogleMap() {
+
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
