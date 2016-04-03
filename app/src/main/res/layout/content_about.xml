@@ -29,11 +29,14 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/about_us_main"
-                android:id="@+id/textView2" />
+                android:id="@+id/aboutBodyText" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/aboutPoweredByText"
+                android:clickable="true"
+                android:onClick="onClick"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/powered_by_tag"
                 android:textColor="@color/colorAccent"/>

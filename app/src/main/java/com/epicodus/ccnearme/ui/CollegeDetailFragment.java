@@ -45,10 +45,8 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     @Bind(R.id.collegeNameTextView) TextView mCollegeNameTextView;
     @Bind(R.id.collegeLocationTextView) TextView mCollegeLocationTextView;
     @Bind(R.id.saveCollegeButton) Button mSaveCollegeButton;
-    @Bind(R.id.websiteIcon) FontAwesomeIconTextView mWebsiteIcon;
-    @Bind(R.id.priceCalculatorIcon) FontAwesomeIconTextView mPriceCalculatorIcon;
-    @Bind(R.id.websiteTextView) TextView mWebsiteText;
-    @Bind(R.id.priceCalculatorTextView) TextView mPriceCalculatorText;
+    @Bind(R.id.shareCollegeButton) Button mShareCollegeButton;
+    @Bind(R.id.priceCalculatorButton) Button mPriceCalculatorButton;
     @Bind(R.id.mapView) MapView mMapView;
 
     private College mCollege;
@@ -91,9 +89,10 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
 
         mGeocodeService = new GeocodeService(getContext());
 
-        mWebsiteIcon.setOnClickListener(this);
-        mPriceCalculatorIcon.setOnClickListener(this);
+        mPriceCalculatorButton.setOnClickListener(this);
+        mShareCollegeButton.setOnClickListener(this);
         mSaveCollegeButton.setOnClickListener(this);
+        mCollegeNameTextView.setOnClickListener(this);
 
         mMapView.onCreate(savedInstanceState);
         initializeGoogleMap();
@@ -103,21 +102,28 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (v == mWebsiteIcon) {
-            Uri website = Uri.parse("http://" + mCollege.getCollegeMainUrl());
-            Intent intent = new Intent(Intent.ACTION_VIEW, website);
-            if (isSafe(intent)) {
-                startActivity(intent);
-            }
-        } else if (v == mPriceCalculatorIcon) {
+        if (v == mPriceCalculatorButton) {
             Uri website = Uri.parse("http://" + mCollege.getPriceCalculatorUrl());
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
             if (isSafe(intent)) {
                 startActivity(intent);
             }
+        } else if (v == mShareCollegeButton) {
+            Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra(Intent.EXTRA_SUBJECT, mCollege.getName());
+            intent.putExtra(Intent.EXTRA_TEXT, "I looked up " + mCollege.getName() + " on College Near Me.");
+            startActivity(Intent.createChooser(intent, "How do you want to share?"));
         } else if (v == mSaveCollegeButton) {
             mFirebaseRef.child("savedcolleges/" + mCurrentUser + "/" + mCollege.getId()).setValue(mCollege);
             Toast.makeText(getContext(), "Saved " + mCollege.getName(), Toast.LENGTH_LONG).show();
+        } else if (v == mCollegeNameTextView) {
+            Uri website = Uri.parse("http://" + mCollege.getCollegeMainUrl());
+            Intent intent = new Intent(Intent.ACTION_VIEW, website);
+            if (isSafe(intent)) {
+                startActivity(intent);
+            }
         }
     }
 

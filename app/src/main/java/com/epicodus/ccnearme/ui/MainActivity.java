@@ -37,7 +37,6 @@ import com.firebase.ui.auth.core.FirebaseLoginError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -117,9 +116,6 @@ public class MainActivity extends FirebaseLoginBaseActivity
         setEnabledAuthProvider(AuthProviderType.GOOGLE);
         setEnabledAuthProvider(AuthProviderType.PASSWORD);
         checkForUserAuthentication();
-//        Log.d("LAST ZIP out", "HERE: " + mLastZip);
-//
-//        getNearbyColleges(mLastZip, 20);
     }
 
     @Override

@@ -29,6 +29,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="College Name"
+                android:clickable="true"
+                android:onClick="onClick"
                 android:id="@+id/collegeNameTextView"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -54,85 +56,58 @@
             android:background="@color/colorPrimaryLight">
 
             <LinearLayout
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_above="@+id/saveCollegeButton"
-                android:paddingLeft="30dp"
-                android:paddingTop="20dp"
-                android:paddingRight="30dp">
+                android:padding="10dp"
+                android:layout_alignParentBottom="true"
+                >
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <com.epicodus.ccnearme.views.FontAwesomeIconTextView
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:text="&#xf108;"
-                        android:textSize="30sp"
-                        android:onClick="onClick"
-                        android:textAlignment="center"
-                        android:clickable="true"
-                        android:id="@+id/websiteIcon"
-                        android:textColor="@color/colorPrimaryDark" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Website"
-                        android:id="@+id/websiteTextView"
-                        android:layout_toRightOf="@+id/websiteIcon"
-                        android:layout_toEndOf="@+id/websiteIcon"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginStart="30dp" />
-                </RelativeLayout>
-
-                <RelativeLayout
+                <com.epicodus.ccnearme.views.FontAwesomeIconButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/priceCalculatorLayout">
+                    android:backgroundTint="@color/colorAccent"
+                    android:textColor="@color/abc_primary_text_material_dark"
+                    android:id="@+id/saveCollegeButton"
+                    android:textSize="36sp"
+                    android:text="&#xf114;"/>
 
-                    <com.epicodus.ccnearme.views.FontAwesomeIconTextView
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:text="&#xf155;"
-                        android:textSize="30sp"
-                        android:textAlignment="center"
-                        android:id="@+id/priceCalculatorIcon"
-                        android:onClick="onClick"
-                        android:clickable="true"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:layout_marginTop="@dimen/activity_vertical_margin" />
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" >
+                </Space>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Price Calculator"
-                        android:id="@+id/priceCalculatorTextView"
-                        android:layout_toRightOf="@+id/priceCalculatorIcon"
-                        android:layout_toEndOf="@+id/priceCalculatorIcon"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginTop="@dimen/activity_vertical_margin" />
-                </RelativeLayout>
+                <com.epicodus.ccnearme.views.FontAwesomeIconButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorAccent"
+                    android:textColor="@color/abc_primary_text_material_dark"
+                    android:id="@+id/shareCollegeButton"
+                    android:textSize="36sp"
+                    android:text="&#xf1e0;"
+                    />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" >
+                </Space>
+
+                <com.epicodus.ccnearme.views.FontAwesomeIconButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorAccent"
+                    android:textColor="@color/abc_primary_text_material_dark"
+                    android:id="@+id/priceCalculatorButton"
+                    android:textSize="36sp"
+                    android:text="&#xf155;"/>
+
+
+
             </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Save This College"
-                android:id="@+id/saveCollegeButton"
-                android:layout_alignParentBottom="true"
-                android:textSize="15sp"
-                android:layout_centerHorizontal="true"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@color/abc_primary_text_material_dark" />
         </RelativeLayout>
     </LinearLayout>
+
 </FrameLayout>

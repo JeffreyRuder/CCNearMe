@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">CC Near Me</string>
-    <string name="app_tag">Highlighting Community Colleges</string>
+    <string name="app_name">College Near Me</string>
+    <string name="app_tag">Highlighting Nearby Colleges</string>
     <string name="powered_by_tag">Powered by College Scorecard Data</string>
 
     <string name="firebase_url">https://collegenearme.firebaseio.com</string>
@@ -22,7 +22,11 @@
     <string name="title_activity_about">About College Near Me</string>
     <string name="title_activity_saved">My Saved Colleges</string>
 
-    <string name="about_us_main">CC Near Me provides students and their families accurate, relevant information about nearby community colleges.\n\nCC Near Me adapts Department of Education data into a form that makes sense for community colleges, taking their students and missions into account.</string>
+    <string name="about_us_main">College Near Me provides students and their families accurate,
+        relevant information about nearby colleges.\n\nCollege Near Me adapts Department of Education
+        data into a form that makes sense for prospective students. It builds on existing Department of
+        Education resources by incorporating the features of your phone, like maps and sharing options.</string>
+
     <string name="main_activity_none_nearby">There are no nearby colleges.</string>
 
     <string name="shared_preferences_file">com.epicodus.ccnearme.PREFERENCE_FILE_KEY</string>
