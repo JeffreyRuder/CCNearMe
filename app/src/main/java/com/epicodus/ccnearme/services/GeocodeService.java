@@ -88,7 +88,14 @@ public class GeocodeService {
                 JSONObject results = responseJSON.getJSONArray("results").getJSONObject(0);
                 JSONArray addressComponents = results.getJSONArray("address_components");
                 JSONObject lastObject = addressComponents.getJSONObject(addressComponents.length() - 1);
-                zip = lastObject.getString("short_name");
+                JSONArray type = lastObject.getJSONArray("types");
+                Log.d("TYPEARR", type + "");
+                if (type.get(0).equals("postal_code_suffix")) {
+                    JSONObject secondToLast = addressComponents.getJSONObject(addressComponents.length() - 2);
+                    zip = secondToLast.getString("short_name");
+                } else {
+                    zip = lastObject.getString("short_name");
+                }
             }
         } catch (JSONException | IOException e) {
             e.printStackTrace();
