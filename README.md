@@ -1,4 +1,4 @@
-# CC Near Me
+# College Near Me
 
 #### By Jeffrey Ruder
 
