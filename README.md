@@ -4,12 +4,9 @@
 
 ## Description
 
-The [College Scorecard](https://collegescorecard.ed.gov/) is an effective website and a step forward in providing transparent information about colleges, but is has some issues related to community colleges specifically:
+The [College Scorecard](https://collegescorecard.ed.gov/) is an effective website and a step forward in providing transparent information about colleges.
 
-* Graduation rate information does not account for community college students who transfer to four-year institutions
-* Many of the statistics related to average cost, average income outcomes, and so on aggregate students at community colleges and students at four year schools.
-
-CC Near Me aims to highlight the most accurate and relevant parts of the College Scorecard Data set while adding geolocation functionality. Proximity plays a greater role in the college sections process for prospective community college students, so why not make use of the geolocation capabilities a phone provides?
+College Near Me aims to highlight the most accurate and relevant parts of the College Scorecard Data set while adding geolocation and other native app functionality. Proximity plays a greater role in the college sections process for prospective college students than the media generally acknowledges. Why not make use of the geolocation capabilities and other features a phone provides?
 
 ## Technologies
 
