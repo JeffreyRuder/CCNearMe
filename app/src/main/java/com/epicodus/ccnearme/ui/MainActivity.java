@@ -64,7 +64,6 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
 
     @Bind(R.id.background_image) ImageView mBackgroundImage;
     @Bind(R.id.beginButton) Button mBeginButton;
-    @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
     @Bind(R.id.collegesNearYouNumberTextView) TextView mCollegesNearYouNumberTextView;
     @Bind(R.id.zipInput) EditText mZipInput;
     @Bind(R.id.zipSearchButton) Button mZipSearchButton;
@@ -96,7 +95,6 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
 
         ButterKnife.bind(this);
 
-        mFloatingActionButton.setOnClickListener(this);
         mBeginButton.setOnClickListener(this);
         mBeginButton.setEnabled(false);
         mZipSearchButton.setOnClickListener(this);
@@ -145,10 +143,6 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
                 mZipInput.setText("");
                 getCollegesByZip(input);
             }
-        }
-        else if (view == mFloatingActionButton) {
-            Snackbar.make(view, "Do something here", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
         }
     }
 
@@ -208,7 +202,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
                 Intent intent = new Intent(MainActivity.this, SavedCollegeListActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(this, "You must login to view saved colleges", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You must login to view saved colleges.", Toast.LENGTH_LONG).show();
             }
         } else if (id == R.id.nav_private) {
             if (item.isChecked()) {

@@ -51,5 +51,6 @@
     <string name="carnegie_description_18">%s is a special-focus institution.</string>
 
     <string name="admission_percent" formatted="false">\n%s has an overall admission rate of %s</string>
+    <string name="zip_code_search_hint">Or search by zip code...</string>
 
 </resources>

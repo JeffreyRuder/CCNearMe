@@ -26,9 +26,8 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CollegeListActivity extends AppCompatActivity implements View.OnClickListener {
+public class CollegeListActivity extends AppCompatActivity {
     @Bind(R.id.recyclerView) RecyclerView mCollegeRecyclerView;
-    @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
 
     private ArrayList<College> mNearbyColleges;
     private CollegeRecyclerAdapter mAdapter;
@@ -42,7 +41,6 @@ public class CollegeListActivity extends AppCompatActivity implements View.OnCli
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        mFloatingActionButton.setOnClickListener(this);
         mNearbyColleges = Parcels.unwrap(getIntent().getParcelableExtra("colleges"));
 
         try {
@@ -69,14 +67,6 @@ public class CollegeListActivity extends AppCompatActivity implements View.OnCli
         super.onStart();
         for (College college : mNearbyColleges) {
             setCollegeLocation(college);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view == mFloatingActionButton) {
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
         }
     }
 
