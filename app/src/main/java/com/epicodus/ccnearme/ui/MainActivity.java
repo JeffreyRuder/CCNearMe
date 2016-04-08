@@ -78,7 +78,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     private MenuItem mLoginOption;
     private MenuItem mLogoutOption;
 
-    /////ANDROID LIFECYCLE
+    /////LIFECYCLE
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,6 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
         // All providers are optional! Remove any you don't want.
         setEnabledAuthProvider(AuthProviderType.FACEBOOK);
         setEnabledAuthProvider(AuthProviderType.GOOGLE);
-//        setEnabledAuthProvider(AuthProviderType.PASSWORD);
         checkForUserAuthentication();
     }
 
@@ -198,19 +197,23 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_saved) {
-            Intent intent = new Intent(MainActivity.this, SavedCollegeListActivity.class);
-            startActivity(intent);
+            if (mFirebaseRef.getAuth() != null) {
+                Intent intent = new Intent(MainActivity.this, SavedCollegeListActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "You must login to view saved colleges", Toast.LENGTH_LONG).show();
+            }
         } else if (id == R.id.nav_private) {
             if (item.isChecked()) {
                 item.setIcon(R.drawable.ic_thumb_down_black_24dp);
                 item.setChecked(false);
                 mEditor.putBoolean("include_private", false).commit();
-                getNearbyColleges(mLastZip, 20);
+                getNearbyColleges(mLastZip, 18);
             } else {
                 item.setIcon(R.drawable.ic_thumb_up_black_24dp);
                 item.setChecked(true);
                 mEditor.putBoolean("include_private", true).commit();
-                getNearbyColleges(mLastZip, 20);
+                getNearbyColleges(mLastZip, 18);
             }
             return true;
         } else if (id == R.id.nav_for_profit) {
@@ -218,12 +221,12 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
                 item.setIcon(R.drawable.ic_thumb_down_black_24dp);
                 item.setChecked(false);
                 mEditor.putBoolean("include_for_profit", false).commit();
-                getNearbyColleges(mLastZip, 20);
+                getNearbyColleges(mLastZip, 18);
             } else {
                 item.setIcon(R.drawable.ic_thumb_up_black_24dp);
                 item.setChecked(true);
                 mEditor.putBoolean("include_for_profit", true).commit();
-                getNearbyColleges(mLastZip, 20);
+                getNearbyColleges(mLastZip, 18);
             }
             return true;
         }
@@ -287,7 +290,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
 
     private void getCollegesByZip(String zip) {
         final CollegeScorecardService collegeScorecardService = new CollegeScorecardService(this);
-        collegeScorecardService.findColleges(zip, 20, new Callback() {
+        collegeScorecardService.findColleges(zip, 18, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -318,7 +321,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     mLastZip = geocodeService.processZipResults(response);
-                    getNearbyColleges(mLastZip, 20);
+                    getNearbyColleges(mLastZip, 18);
                 }
             });
         }

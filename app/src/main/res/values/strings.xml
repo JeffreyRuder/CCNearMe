@@ -22,14 +22,34 @@
     <string name="title_activity_about">About College Near Me</string>
     <string name="title_activity_saved">My Saved Colleges</string>
 
-    <string name="about_us_main">College Near Me provides students and their families accurate,
-        relevant information about nearby colleges.\n\nCollege Near Me adapts Department of Education
-        data into a form that makes sense for prospective students. It builds on existing Department of
-        Education resources by incorporating the features of your phone, like maps and sharing options.</string>
+    <string name="about_us_main">College Near Me provides students and their families accurate
+        information about nearby colleges.\n\nCollege Near Me uses existing Department of
+        Education data and adds the features of Android devices, like maps and sharing options.</string>
 
     <string name="main_activity_none_nearby">There are no nearby colleges.</string>
 
     <string name="shared_preferences_file">com.epicodus.ccnearme.PREFERENCE_FILE_KEY</string>
     <string name="details">Details</string>
+
+    <string name="carnegie_description_1">%s is a very small school. It awards associate\'s degrees, and has an enrollment of less than 500 students.</string>
+    <string name="carnegie_description_2">%s is a small school. It awards associate\'s degrees, and has an enrollment of less than 2,000 students.</string>
+    <string name="carnegie_description_3">%s is a medium-sized school. It awards associate\'s degrees, and has an enrollment of between 2,000 and 5,000 students.</string>
+    <string name="carnegie_description_4">%s is a large school. It awards associate\'s degrees, and has an enrollment of between 5,000 and 10,000 students.</string>
+    <string name="carnegie_description_5">%s is a very large school. It awards associate\'s degrees, and has an enrollment of more than 10,000 students.</string>
+    <string name="carnegie_description_6">%s is a very small school. It awards bachelor\'s degrees and has an enrollment of less than 1,000 students. Many students do not live on campus. Many students attend part-time.</string>
+    <string name="carnegie_description_7">%s is a very small school. It awards bachelor\'s degrees and has an enrollment of less than 1,000 students. Many students do not live on campus, but most attend full-time.</string>
+    <string name="carnegie_description_8">%s is a very small school. It awards bachelor\'s degrees and has an enrollment of less than 1,000 students. Most students live on campus and attend full-time.</string>
+    <string name="carnegie_description_9">%s is a small school. It awards bachelor\'s degrees and has an enrollment of less than 3,000 students. Many students do not live on campus. Many students attend part-time.</string>
+    <string name="carnegie_description_10">%s is a small school. It awards bachelor\'s degrees and has an enrollment of less than 3,000 students. Many students do not live on campus, but most attend full-time.</string>
+    <string name="carnegie_description_11">%s is a small school. It awards bachelor\'s degrees and has an enrollment of less than 3,000 students. Most students live on campus and attend full-time.</string>
+    <string name="carnegie_description_12">%s is a medium-sized school. It awards bachelor\'s degrees and has an enrollment of between 3,000 and 10,000 students. Many students do not live on campus. Many students attend part-time.</string>
+    <string name="carnegie_description_13">%s is a medium-sized school. It awards bachelor\'s degrees and has an enrollment of between 3,000 and 10,000 students. Many students do not live on campus, but most attend full-time.</string>
+    <string name="carnegie_description_14">%s is a medium-sized school. It awards bachelor\'s degrees and has an enrollment of between 3,000 and 10,000 students. Most students live on campus and attend full-time.</string>
+    <string name="carnegie_description_15">%s is a large school. It awards bachelor\'s degrees and has an enrollment of more than 10,000 students. Many students do not live on campus. Many students attend part-time.</string>
+    <string name="carnegie_description_16">%s is a large school. It awards bachelor\'s degrees and has an enrollment of more than 10,000 students. Many students do not live on campus, but most attend full-time.</string>
+    <string name="carnegie_description_17">%s is a large school. It awards bachelor\'s degrees and has an enrollment of more than 10,000 students. Most students live on campus and attend full-time.</string>
+    <string name="carnegie_description_18">%s is a special-focus institution.</string>
+
+    <string name="admission_percent" formatted="false">\n%s has an overall admission rate of %s</string>
 
 </resources>

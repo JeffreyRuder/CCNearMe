@@ -3,6 +3,7 @@ package com.epicodus.ccnearme.ui;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,9 +18,7 @@ import com.epicodus.ccnearme.CollegeApplication;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.GeocodeService;
-import com.epicodus.ccnearme.views.FontAwesomeIconTextView;
 import com.firebase.client.Firebase;
-import com.firebase.client.snapshot.DoubleNode;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,15 +30,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.parceler.Parcels;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 
 public class CollegeDetailFragment extends Fragment implements View.OnClickListener {
@@ -49,6 +44,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     @Bind(R.id.shareCollegeButton) Button mShareCollegeButton;
     @Bind(R.id.priceCalculatorButton) Button mPriceCalculatorButton;
 
+    @Bind(R.id.collegeDescription) TextView mCollegeDescriptionTextView;
     @Bind(R.id.admissionPercentage) TextView mAdmissionPercentageTextView;
 
     @Bind(R.id.mapView) MapView mMapView;
@@ -81,6 +77,24 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_college_detail, container, false);
         ButterKnife.bind(this, view);
@@ -94,12 +108,12 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
 
         mCollegeNameTextView.setText(mCollege.getName());
         mCollegeLocationTextView.setText(String.format(Locale.US, getString(R.string.city_state_zip), mCollege.getCity(), mCollege.getState(), mCollege.getZip()));
-
         if (!mCollege.getAdmissionPercentage().equals("null")) {
-            mAdmissionPercentageTextView.setText("Overall admission rate of " + formattedAdmissionsPercentage(mCollege.getAdmissionPercentage()));
+            mAdmissionPercentageTextView.setText(String.format(Locale.US, getString(R.string.admission_percent), mCollege.getName(), formattedAdmissionsPercentage(mCollege.getAdmissionPercentage())));
         } else {
             mAdmissionPercentageTextView.setVisibility(View.GONE);
         }
+        mCollegeDescriptionTextView.setText(getCollegeDescription());
 
         mGeocodeService = new GeocodeService(getContext());
 
@@ -175,5 +189,48 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         Double doublePercentage = Double.parseDouble(rawPercentage);
         int roundedPercentage = (int) Math.round(doublePercentage * 100);
         return roundedPercentage + "%.";
+    }
+
+    private String getCollegeDescription() {
+        switch (mCollege.getCarnegie_size_setting()) {
+            case 1:
+                return String.format(getString(R.string.carnegie_description_1), mCollege.getName());
+            case 2:
+                return String.format(getString(R.string.carnegie_description_2), mCollege.getName());
+            case 3:
+                return String.format(getString(R.string.carnegie_description_3), mCollege.getName());
+            case 4:
+                return String.format(getString(R.string.carnegie_description_4), mCollege.getName());
+            case 5:
+                return String.format(getString(R.string.carnegie_description_5), mCollege.getName());
+            case 6:
+                return String.format(getString(R.string.carnegie_description_6), mCollege.getName());
+            case 7:
+                return String.format(getString(R.string.carnegie_description_7), mCollege.getName());
+            case 8:
+                return String.format(getString(R.string.carnegie_description_8), mCollege.getName());
+            case 9:
+                return String.format(getString(R.string.carnegie_description_9), mCollege.getName());
+            case 10:
+                return String.format(getString(R.string.carnegie_description_10), mCollege.getName());
+            case 11:
+                return String.format(getString(R.string.carnegie_description_11), mCollege.getName());
+            case 12:
+                return String.format(getString(R.string.carnegie_description_12), mCollege.getName());
+            case 13:
+                return String.format(getString(R.string.carnegie_description_13), mCollege.getName());
+            case 14:
+                return String.format(getString(R.string.carnegie_description_14), mCollege.getName());
+            case 15:
+                return String.format(getString(R.string.carnegie_description_15), mCollege.getName());
+            case 16:
+                return String.format(getString(R.string.carnegie_description_16), mCollege.getName());
+            case 17:
+                return String.format(getString(R.string.carnegie_description_17), mCollege.getName());
+            case 18:
+                return String.format(getString(R.string.carnegie_description_18), mCollege.getName());
+            default:
+                return "";
+        }
     }
 }

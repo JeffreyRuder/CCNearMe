@@ -9,6 +9,8 @@ import com.google.android.gms.nearby.messages.PublishCallback;
 
 import org.parceler.Parcel;
 
+import okhttp3.Response;
+
 @Parcel
 public class College {
     public int id;
@@ -19,6 +21,7 @@ public class College {
     public int ownershipCode;
     public int localeCode;
     public int carnegieBasicCode;
+    public int carnegie_size_setting;
     public int numberOfBranches;
     public String priceCalculatorUrl;
     public String collegeMainUrl;
@@ -29,7 +32,7 @@ public class College {
     public College(){}
 
     public College(int id, String name, String city, String state, int zip, int ownership,
-                   int locale, int carnegie, int numberOfBranches, String price_calculator_url,
+                   int locale, int carnegie, int carnegie_size_setting, int numberOfBranches, String price_calculator_url,
                    String college_main_url, String admissionPercentage) {
         this.id = id;
         this.name = name;
@@ -39,6 +42,7 @@ public class College {
         this.ownershipCode = ownership;
         this.localeCode = locale;
         this.carnegieBasicCode = carnegie;
+        this.carnegie_size_setting = carnegie_size_setting;
         this.numberOfBranches = numberOfBranches;
         this.priceCalculatorUrl = price_calculator_url;
         this.collegeMainUrl = college_main_url;
@@ -75,6 +79,10 @@ public class College {
 
     public int getCarnegieBasicCode() {
         return carnegieBasicCode;
+    }
+
+    public int getCarnegie_size_setting() {
+        return carnegie_size_setting;
     }
 
     public int getNumberOfBranches() {
@@ -178,5 +186,4 @@ public class College {
             return "";
         }
     }
-
 }

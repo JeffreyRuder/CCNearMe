@@ -28,7 +28,7 @@ public class CollegeScorecardService {
     private final String API_KEY;
     private static final String API_ENDPOINT = "https://api.data.gov/ed/collegescorecard/v1/schools.json";
     private static final String RESULTS_PER_PAGE = "100";
-    private static final String INCLUDED_CARNEGIE_CLASSIFICATIONS = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24";
+    private static final String INCLUDED_CARNEGIE_CLASSIFICATIONS = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,33";
     private final String INCLUDED_OWNERSHIPS;
     private boolean mIncludePrivate;
     private boolean mIncludeForProfit;
@@ -66,10 +66,11 @@ public class CollegeScorecardService {
                 "school.ownership," +
                 "school.locale," +
                 "school.carnegie_basic," +
+                "school.carnegie_size_setting," +
                 "school.branches," +
                 "school.price_calculator_url," +
                 "school.school_url," +
-                threeYearsAgo() + ".admissions.admission_rate.overall";
+                THREE_YEARS_AGO + ".admissions.admission_rate.overall";
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(API_ENDPOINT).newBuilder();
 
@@ -78,7 +79,10 @@ public class CollegeScorecardService {
         urlBuilder.addQueryParameter("school.ownership", INCLUDED_OWNERSHIPS);
 
         //include only schools enrolling students recently
-        urlBuilder.addQueryParameter(threeYearsAgo() + ".student.size__range", "1..");
+        urlBuilder.addQueryParameter(THREE_YEARS_AGO + ".student.size__range", "1..");
+
+        //sort by admissions selectivity
+        urlBuilder.addQueryParameter("_sort", THREE_YEARS_AGO + ".admissions.admission_rate.overall");
 
         //indicate what information we want
         urlBuilder.addQueryParameter("_fields", fieldsToInclude);
@@ -117,6 +121,7 @@ public class CollegeScorecardService {
                     int ownership = collegeResult.getInt("school.ownership");
                     int locale = collegeResult.getInt("school.locale");
                     int carnegie = collegeResult.getInt("school.carnegie_basic");
+                    int carnegie_size_setting = collegeResult.getInt("school.carnegie_size_setting");
                     int numberOfBranches = collegeResult.getInt("school.branches");
                     String priceCalculatorUrl = collegeResult.getString("school.price_calculator_url");
                     String collegeUrl = collegeResult.getString("school.school_url");
@@ -125,7 +130,7 @@ public class CollegeScorecardService {
                     String admissionPercentage = collegeResult.getString(THREE_YEARS_AGO + ".admissions.admission_rate.overall");
 
                     College college = new College(id, name, city, state, zip, ownership, locale,
-                            carnegie, numberOfBranches, priceCalculatorUrl, collegeUrl, admissionPercentage);
+                            carnegie, carnegie_size_setting, numberOfBranches, priceCalculatorUrl, collegeUrl, admissionPercentage);
                     colleges.add(college);
                 }
             }
@@ -133,9 +138,5 @@ public class CollegeScorecardService {
             exception.printStackTrace();
         }
         return colleges;
-    }
-
-    private String threeYearsAgo() {
-        return THREE_YEARS_AGO;
     }
 }
