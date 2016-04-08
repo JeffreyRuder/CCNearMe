@@ -1,12 +1,17 @@
 package com.epicodus.ccnearme.ui;
 
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +22,6 @@ import android.widget.Toast;
 import com.epicodus.ccnearme.CollegeApplication;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
-import com.epicodus.ccnearme.services.GeocodeService;
 import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -52,8 +56,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     private College mCollege;
     private Firebase mFirebaseRef;
     private String mCurrentUser;
-
-    private GeocodeService mGeocodeService;
+    private static final int PERMISSIONS_REQUEST_COARSE_LOCATION = 333555;
 
     public static CollegeDetailFragment newInstance(College college) {
         CollegeDetailFragment collegeDetailFragment = new CollegeDetailFragment();
@@ -115,8 +118,6 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         }
         mCollegeDescriptionTextView.setText(getCollegeDescription());
 
-        mGeocodeService = new GeocodeService(getContext());
-
         mPriceCalculatorButton.setOnClickListener(this);
         mShareCollegeButton.setOnClickListener(this);
         mSaveCollegeButton.setOnClickListener(this);
@@ -167,7 +168,19 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                googleMap.setMyLocationEnabled(true);
+                int permissionCheck = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+                if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                    googleMap.setMyLocationEnabled(true);
+                } else {
+                    showMessageOKCancel("To see where you are on the map, allow College Near Me to use your location.",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_COARSE_LOCATION);
+                                }
+                            });
+                    return;
+                }
 
                 MapsInitializer.initialize(getActivity());
 
@@ -232,5 +245,34 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
             default:
                 return "";
         }
+    }
+
+    //boiler plate function to handle request result, uses dummy int constant
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_COARSE_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getActivity(), "Thank You", Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Toast.makeText(getActivity(), "Location Use Denied", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            }
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                // other 'case' lines to check for other permissions this app might request go below here
+        }
+    }
+    //custom dialog message to notify user
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 }

@@ -1,13 +1,18 @@
 package com.epicodus.ccnearme.ui;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -77,6 +82,8 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
 
     private MenuItem mLoginOption;
     private MenuItem mLogoutOption;
+
+    private static final int PERMISSIONS_REQUEST_COARSE_LOCATION = 333555;
 
     /////LIFECYCLE
 
@@ -308,8 +315,31 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            useLastLocationToSearchForColleges();
+        } else {
+            showMessageOKCancel("Allow access to your location to see colleges near you.",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_COARSE_LOCATION);
+                        }
+                    });
+        }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    public void useLastLocationToSearchForColleges() {
         if (mLastLocation != null) {
             final GeocodeService geocodeService = new GeocodeService(this);
             geocodeService.getZipFromLocation(mLastLocation, new Callback() {
@@ -368,8 +398,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     @Override
     public void onFirebaseLoginUserError(FirebaseLoginError firebaseError) {
         if (firebaseError.message.equals("FirebaseError: The specified user does not exist.")) {
-            TextView view = (TextView) findViewById(R.id.email);
-            Log.d("EMAIL", view.getText().toString());
+            showErrorDialog("Failed to login. Please create an account.");
         } else {
             showErrorDialog("Failed to login. Please double-check your login information.");
         }

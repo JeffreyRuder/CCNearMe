@@ -5,11 +5,8 @@ import android.content.res.Resources;
 import com.epicodus.ccnearme.R;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.nearby.messages.PublishCallback;
 
 import org.parceler.Parcel;
-
-import okhttp3.Response;
 
 @Parcel
 public class College {
