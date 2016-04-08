@@ -29,10 +29,10 @@ import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.CollegeScorecardService;
 import com.epicodus.ccnearme.services.GeocodeService;
+import com.epicodus.ccnearme.util.ModifiedFirebaseLoginBaseActivity;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.ui.auth.core.AuthProviderType;
-import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -52,7 +52,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class MainActivity extends FirebaseLoginBaseActivity
+public class MainActivity extends ModifiedFirebaseLoginBaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private final String TAG = this.getClass().getSimpleName();
@@ -77,6 +77,8 @@ public class MainActivity extends FirebaseLoginBaseActivity
 
     private MenuItem mLoginOption;
     private MenuItem mLogoutOption;
+
+    /////ANDROID LIFECYCLE
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +114,8 @@ public class MainActivity extends FirebaseLoginBaseActivity
         super.onStart();
         // All providers are optional! Remove any you don't want.
         setEnabledAuthProvider(AuthProviderType.FACEBOOK);
-//        setEnabledAuthProvider(AuthProviderType.TWITTER);
         setEnabledAuthProvider(AuthProviderType.GOOGLE);
-        setEnabledAuthProvider(AuthProviderType.PASSWORD);
+//        setEnabledAuthProvider(AuthProviderType.PASSWORD);
         checkForUserAuthentication();
     }
 
@@ -123,6 +124,8 @@ public class MainActivity extends FirebaseLoginBaseActivity
         mGoogleApiClient.disconnect();
         super.onStop();
     }
+
+    /////HANDLE CLICKS
 
     @Override
     public void onClick(View view) {
@@ -143,19 +146,10 @@ public class MainActivity extends FirebaseLoginBaseActivity
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+    /////ACTION BAR
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
         //Show only appropriate login/logout options for authentication state.
@@ -173,9 +167,6 @@ public class MainActivity extends FirebaseLoginBaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_logout:
                 logout();
@@ -187,10 +178,20 @@ public class MainActivity extends FirebaseLoginBaseActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    /////NAVIGATION DRAWER
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_about) {
@@ -229,6 +230,33 @@ public class MainActivity extends FirebaseLoginBaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void initializeNavigationDrawer() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        if (mIncludeForProfit) {
+            MenuItem item = navigationView.getMenu().findItem(R.id.nav_for_profit);
+            item.setChecked(true);
+            item.setIcon(R.drawable.ic_thumb_up_black_24dp);
+        }
+        if (mIncludePrivate) {
+            MenuItem item = navigationView.getMenu().findItem(R.id.nav_private);
+            item.setChecked(true);
+            item.setIcon(R.drawable.ic_thumb_up_black_24dp);
+        }
+    }
+
+    /////GETTING COLLEGES
+
+    private void initializeApiClient() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
     }
 
     private void getNearbyColleges(String location, int searchRange) {
@@ -275,6 +303,39 @@ public class MainActivity extends FirebaseLoginBaseActivity
         });
     }
 
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            final GeocodeService geocodeService = new GeocodeService(this);
+            geocodeService.getZipFromLocation(mLastLocation, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    mLastZip = geocodeService.processZipResults(response);
+                    getNearbyColleges(mLastZip, 20);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        showErrorDialog("Failed to determine your location. Please search by zip code instead.");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        showErrorDialog("Failed to determine your location. Please search by zip code instead.");
+    }
+
+    /////SHARED PREFERENCES FOR CONTROLLING SEARCH PARAMETERS
+
     private void initializeSharedPreferences() {
         mSharedPreferences = this.getSharedPreferences(getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
@@ -282,27 +343,11 @@ public class MainActivity extends FirebaseLoginBaseActivity
         mIncludeForProfit = mSharedPreferences.getBoolean("include_for_profit", true);
     }
 
-    private void initializeNavigationDrawer() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        if (mIncludeForProfit) {
-            MenuItem item = navigationView.getMenu().findItem(R.id.nav_for_profit);
-            item.setChecked(true);
-            item.setIcon(R.drawable.ic_thumb_up_black_24dp);
-        }
-        if (mIncludePrivate) {
-            MenuItem item = navigationView.getMenu().findItem(R.id.nav_private);
-            item.setChecked(true);
-            item.setIcon(R.drawable.ic_thumb_up_black_24dp);
-        }
-    }
-
-    //LOGIN / LOGOUT METHODS
+    //LOGIN / LOGOUT
 
     @Override
     public void showFirebaseLoginPrompt() {
         super.showFirebaseLoginPrompt();
-        //TODO hide input for email and password until registration is implemented
     }
 
     @Override
@@ -319,8 +364,12 @@ public class MainActivity extends FirebaseLoginBaseActivity
 
     @Override
     public void onFirebaseLoginUserError(FirebaseLoginError firebaseError) {
-        Log.e(TAG, "Login user error: " + firebaseError.toString());
-        showErrorDialog("Failed to login. Please double-check your login information.");
+        if (firebaseError.message.equals("FirebaseError: The specified user does not exist.")) {
+            TextView view = (TextView) findViewById(R.id.email);
+            Log.d("EMAIL", view.getText().toString());
+        } else {
+            showErrorDialog("Failed to login. Please double-check your login information.");
+        }
         dismissFirebaseLoginPrompt();
     }
 
@@ -335,7 +384,7 @@ public class MainActivity extends FirebaseLoginBaseActivity
 
     @Override
     public void onFirebaseLoggedOut() {
-        Toast toast = Toast.makeText(this, "Logged out.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, "You are logged out. Login to save colleges.", Toast.LENGTH_SHORT);
         toast.show();
         if (mLoginOption != null && mLogoutOption != null) {
             mLogoutOption.setVisible(false);
@@ -372,46 +421,5 @@ public class MainActivity extends FirebaseLoginBaseActivity
                 .setPositiveButton(android.R.string.ok, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-    }
-
-    private void initializeApiClient() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
-            final GeocodeService geocodeService = new GeocodeService(this);
-            geocodeService.getZipFromLocation(mLastLocation, new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    mLastZip = geocodeService.processZipResults(response);
-                    getNearbyColleges(mLastZip, 20);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        showErrorDialog("Failed to determine your location. Please search by zip code instead.");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        showErrorDialog("Failed to determine your location. Please search by zip code instead.");
     }
 }
