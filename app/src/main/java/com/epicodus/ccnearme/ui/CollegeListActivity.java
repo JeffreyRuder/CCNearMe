@@ -1,31 +1,20 @@
 package com.epicodus.ccnearme.ui;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
-import com.epicodus.ccnearme.CollegeApplication;
-import com.epicodus.ccnearme.adapters.CollegeListAdapter;
+import com.epicodus.ccnearme.adapters.CollegeRecyclerAdapter;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
-import com.epicodus.ccnearme.services.GeocodeService;
 import com.epicodus.ccnearme.views.DividerItemDecoration;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
@@ -33,20 +22,16 @@ import org.parceler.Parcels;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Queue;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class CollegeListActivity extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.recyclerView) RecyclerView mCollegeRecyclerView;
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
 
     private ArrayList<College> mNearbyColleges;
-    private CollegeListAdapter mAdapter;
+    private CollegeRecyclerAdapter mAdapter;
     private JSONObject mJson;
 
     @Override
@@ -66,7 +51,7 @@ public class CollegeListActivity extends AppCompatActivity implements View.OnCli
             e.printStackTrace();
         }
 
-        mAdapter = new CollegeListAdapter(getApplicationContext(), mNearbyColleges);
+        mAdapter = new CollegeRecyclerAdapter(getApplicationContext(), mNearbyColleges);
         mCollegeRecyclerView.setAdapter(mAdapter);
         RecyclerView.LayoutManager layoutManager =
                 new LinearLayoutManager(CollegeListActivity.this);

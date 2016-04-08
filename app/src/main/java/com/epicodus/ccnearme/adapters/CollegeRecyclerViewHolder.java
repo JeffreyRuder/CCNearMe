@@ -19,7 +19,7 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CollegeListViewHolder extends RecyclerView.ViewHolder {
+public class CollegeRecyclerViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.collegeNameTextView)
     TextView mCollegeNameTextView;
     @Bind(R.id.collegeCityTextView) TextView mCollegeCityTextView;
@@ -34,7 +34,7 @@ public class CollegeListViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
     ArrayList<College> mColleges = new ArrayList<>();
 
-    public CollegeListViewHolder(View itemView, ArrayList<College> colleges) {
+    public CollegeRecyclerViewHolder(View itemView, ArrayList<College> colleges) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
@@ -66,6 +66,9 @@ public class CollegeListViewHolder extends RecyclerView.ViewHolder {
         if (!college.isMultiCampus()) {
             mNumberCampuses.setVisibility(View.INVISIBLE);
             mNumberCampusesLabel.setVisibility(View.INVISIBLE);
+        } else {
+            mNumberCampuses.setVisibility(View.VISIBLE);
+            mNumberCampusesLabel.setVisibility(View.VISIBLE);
         }
     }
 }

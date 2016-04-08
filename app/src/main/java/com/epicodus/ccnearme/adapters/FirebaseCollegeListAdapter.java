@@ -12,21 +12,21 @@ import com.firebase.client.Query;
 /**
  * Created by Jeffrey on 4/1/2016.
  */
-public class FirebaseCollegeListAdapter extends FirebaseRecyclerAdapter<CollegeListViewHolder, College> {
+public class FirebaseCollegeListAdapter extends FirebaseRecyclerAdapter<CollegeRecyclerViewHolder, College> {
 
     public FirebaseCollegeListAdapter(Query query, Class<College> itemClass) {
         super(query, itemClass);
     }
 
     @Override
-    public CollegeListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CollegeRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.college_list_item, parent, false);
-        return new CollegeListViewHolder(view, getItems());
+        return new CollegeRecyclerViewHolder(view, getItems());
     }
 
     @Override
-    public void onBindViewHolder(CollegeListViewHolder holder, int position) {
+    public void onBindViewHolder(CollegeRecyclerViewHolder holder, int position) {
         holder.bindCollege(getItem(position));
     }
 
