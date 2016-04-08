@@ -2,7 +2,6 @@ package com.epicodus.ccnearme.services;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
@@ -12,10 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,10 +33,12 @@ public class CollegeScorecardService {
     private boolean mIncludePrivate;
     private boolean mIncludeForProfit;
     private SharedPreferences mSharedPreferences;
+    private final String THREE_YEARS_AGO;
 
     public CollegeScorecardService(Context context) {
         mContext = context;
         API_KEY = mContext.getString(R.string.DATA_GOV_KEY);
+        THREE_YEARS_AGO = "2013";
         mSharedPreferences = mContext.getSharedPreferences(mContext.getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
         mIncludePrivate = mSharedPreferences.getBoolean("include_private", true);
         mIncludeForProfit = mSharedPreferences.getBoolean("include_for_profit", true);
@@ -70,7 +68,8 @@ public class CollegeScorecardService {
                 "school.carnegie_basic," +
                 "school.branches," +
                 "school.price_calculator_url," +
-                "school.school_url";
+                "school.school_url," +
+                threeYearsAgo() + ".admissions.admission_rate.overall";
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(API_ENDPOINT).newBuilder();
 
@@ -109,6 +108,7 @@ public class CollegeScorecardService {
 
                 for (int i = 0; i < collegeResults.length(); i++) {
                     JSONObject collegeResult = collegeResults.getJSONObject(i);
+                    //basic data
                     int id = collegeResult.getInt("id");
                     String name = collegeResult.getString("school.name");
                     String city = collegeResult.getString("school.city");
@@ -121,8 +121,11 @@ public class CollegeScorecardService {
                     String priceCalculatorUrl = collegeResult.getString("school.price_calculator_url");
                     String collegeUrl = collegeResult.getString("school.school_url");
 
+                    //data for detail view
+                    String admissionPercentage = collegeResult.getString(THREE_YEARS_AGO + ".admissions.admission_rate.overall");
+
                     College college = new College(id, name, city, state, zip, ownership, locale,
-                            carnegie, numberOfBranches, priceCalculatorUrl, collegeUrl);
+                            carnegie, numberOfBranches, priceCalculatorUrl, collegeUrl, admissionPercentage);
                     colleges.add(college);
                 }
             }
@@ -133,9 +136,6 @@ public class CollegeScorecardService {
     }
 
     private String threeYearsAgo() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy");
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -3);
-        return (dateFormat.format(calendar.getTime()));
+        return THREE_YEARS_AGO;
     }
 }

@@ -19,6 +19,7 @@ import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.services.GeocodeService;
 import com.epicodus.ccnearme.views.FontAwesomeIconTextView;
 import com.firebase.client.Firebase;
+import com.firebase.client.snapshot.DoubleNode;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +48,9 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     @Bind(R.id.saveCollegeButton) Button mSaveCollegeButton;
     @Bind(R.id.shareCollegeButton) Button mShareCollegeButton;
     @Bind(R.id.priceCalculatorButton) Button mPriceCalculatorButton;
+
+    @Bind(R.id.admissionPercentage) TextView mAdmissionPercentageTextView;
+
     @Bind(R.id.mapView) MapView mMapView;
 
     private College mCollege;
@@ -90,6 +94,12 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
 
         mCollegeNameTextView.setText(mCollege.getName());
         mCollegeLocationTextView.setText(String.format(Locale.US, getString(R.string.city_state_zip), mCollege.getCity(), mCollege.getState(), mCollege.getZip()));
+
+        if (!mCollege.getAdmissionPercentage().equals("null")) {
+            mAdmissionPercentageTextView.setText("Overall admission rate of " + formattedAdmissionsPercentage(mCollege.getAdmissionPercentage()));
+        } else {
+            mAdmissionPercentageTextView.setVisibility(View.GONE);
+        }
 
         mGeocodeService = new GeocodeService(getContext());
 
@@ -159,5 +169,11 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
                 }
             }
         });
+    }
+
+    private String formattedAdmissionsPercentage(String rawPercentage) {
+        Double doublePercentage = Double.parseDouble(rawPercentage);
+        int roundedPercentage = (int) Math.round(doublePercentage * 100);
+        return roundedPercentage + "%.";
     }
 }

@@ -24,10 +24,13 @@ public class College {
     public String collegeMainUrl;
     public Double lat;
     public Double lng;
+    public String admissionPercentage;
 
     public College(){}
 
-    public College(int id, String name, String city, String state, int zip, int ownership, int locale, int carnegie, int numberOfBranches, String price_calculator_url, String college_main_url) {
+    public College(int id, String name, String city, String state, int zip, int ownership,
+                   int locale, int carnegie, int numberOfBranches, String price_calculator_url,
+                   String college_main_url, String admissionPercentage) {
         this.id = id;
         this.name = name;
         this.city = city;
@@ -39,6 +42,7 @@ public class College {
         this.numberOfBranches = numberOfBranches;
         this.priceCalculatorUrl = price_calculator_url;
         this.collegeMainUrl = college_main_url;
+        this.admissionPercentage = admissionPercentage;
     }
 
     public int getId() {
@@ -75,6 +79,10 @@ public class College {
 
     public int getNumberOfBranches() {
         return numberOfBranches;
+    }
+
+    public String getAdmissionPercentage() {
+        return admissionPercentage;
     }
 
     public String getPriceCalculatorUrl() {
