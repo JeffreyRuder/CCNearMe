@@ -82,7 +82,11 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         ButterKnife.bind(this, view);
 
         mFirebaseRef = CollegeApplication.getAppInstance().getFirebaseRef();
-        mCurrentUser = mFirebaseRef.getAuth().getUid();
+        if (mFirebaseRef.getAuth() != null) {
+            mCurrentUser = mFirebaseRef.getAuth().getUid();
+        } else {
+            mSaveCollegeButton.setEnabled(false);
+        }
 
         mCollegeNameTextView.setText(mCollege.getName());
         mCollegeLocationTextView.setText(String.format(Locale.US, getString(R.string.city_state_zip), mCollege.getCity(), mCollege.getState(), mCollege.getZip()));
