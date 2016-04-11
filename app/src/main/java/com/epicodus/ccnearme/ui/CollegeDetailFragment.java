@@ -48,8 +48,16 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     @Bind(R.id.shareCollegeButton) Button mShareCollegeButton;
     @Bind(R.id.priceCalculatorButton) Button mPriceCalculatorButton;
 
-    @Bind(R.id.collegeDescription) TextView mCollegeDescriptionTextView;
     @Bind(R.id.admissionPercentage) TextView mAdmissionPercentageTextView;
+    @Bind(R.id.admissionPercentageLabel) TextView mAdmissionPercentageLabelTextView;
+    @Bind(R.id.enrolledStudents) TextView mEnrollmentTextView;
+    @Bind(R.id.enrolledStudentsLabel) TextView mEnrolledStudentsLabel;
+    @Bind(R.id.degreeAwarded) TextView mDegreeAwardedTextView;
+    @Bind(R.id.degreeAwardedLabel) TextView mDegreeAwardedLabelTextView;
+    @Bind(R.id.residentialIcon) TextView mResidentialIconTextView;
+    @Bind(R.id.residentialLabel) TextView mResidentialLabelTextView;
+    @Bind(R.id.partTimeIcon) TextView mPartTimeIconTextView;
+    @Bind(R.id.partTimeIconLabel) TextView mPartTimeIconLabelTextView;
 
     @Bind(R.id.mapView) MapView mMapView;
 
@@ -112,11 +120,15 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         mCollegeNameTextView.setText(mCollege.getName());
         mCollegeLocationTextView.setText(String.format(Locale.US, getString(R.string.city_state_zip), mCollege.getCity(), mCollege.getState(), mCollege.getZip()));
         if (!mCollege.getAdmissionPercentage().equals("null")) {
-            mAdmissionPercentageTextView.setText(String.format(Locale.US, getString(R.string.admission_percent), mCollege.getName(), formattedAdmissionsPercentage(mCollege.getAdmissionPercentage())));
+            mAdmissionPercentageLabelTextView.setText(String.format(Locale.US, getString(R.string.admission_percent), getFormattedAdmissionsPercentage(mCollege.getAdmissionPercentage())));
         } else {
             mAdmissionPercentageTextView.setVisibility(View.GONE);
+            mAdmissionPercentageLabelTextView.setVisibility(View.GONE);
         }
-        mCollegeDescriptionTextView.setText(getCollegeDescription());
+        setDegreeAwardText();
+        setEnrollmentText();
+        setResidentialText();
+        setPartTimeText();
 
         mPriceCalculatorButton.setOnClickListener(this);
         mShareCollegeButton.setOnClickListener(this);
@@ -128,6 +140,8 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
 
         return view;
     }
+
+    /////HANDLE CLICKS
 
     @Override
     public void onClick(View v) {
@@ -161,6 +175,8 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         List activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return activities.size() > 0;
     }
+
+    /////GOOGLE MAP
 
     private void initializeGoogleMap() {
 
@@ -198,56 +214,6 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         });
     }
 
-    private String formattedAdmissionsPercentage(String rawPercentage) {
-        Double doublePercentage = Double.parseDouble(rawPercentage);
-        int roundedPercentage = (int) Math.round(doublePercentage * 100);
-        return roundedPercentage + "%.";
-    }
-
-    private String getCollegeDescription() {
-        switch (mCollege.getCarnegie_size_setting()) {
-            case 1:
-                return String.format(getString(R.string.carnegie_description_1), mCollege.getName());
-            case 2:
-                return String.format(getString(R.string.carnegie_description_2), mCollege.getName());
-            case 3:
-                return String.format(getString(R.string.carnegie_description_3), mCollege.getName());
-            case 4:
-                return String.format(getString(R.string.carnegie_description_4), mCollege.getName());
-            case 5:
-                return String.format(getString(R.string.carnegie_description_5), mCollege.getName());
-            case 6:
-                return String.format(getString(R.string.carnegie_description_6), mCollege.getName());
-            case 7:
-                return String.format(getString(R.string.carnegie_description_7), mCollege.getName());
-            case 8:
-                return String.format(getString(R.string.carnegie_description_8), mCollege.getName());
-            case 9:
-                return String.format(getString(R.string.carnegie_description_9), mCollege.getName());
-            case 10:
-                return String.format(getString(R.string.carnegie_description_10), mCollege.getName());
-            case 11:
-                return String.format(getString(R.string.carnegie_description_11), mCollege.getName());
-            case 12:
-                return String.format(getString(R.string.carnegie_description_12), mCollege.getName());
-            case 13:
-                return String.format(getString(R.string.carnegie_description_13), mCollege.getName());
-            case 14:
-                return String.format(getString(R.string.carnegie_description_14), mCollege.getName());
-            case 15:
-                return String.format(getString(R.string.carnegie_description_15), mCollege.getName());
-            case 16:
-                return String.format(getString(R.string.carnegie_description_16), mCollege.getName());
-            case 17:
-                return String.format(getString(R.string.carnegie_description_17), mCollege.getName());
-            case 18:
-                return String.format(getString(R.string.carnegie_description_18), mCollege.getName());
-            default:
-                return "";
-        }
-    }
-
-    //boiler plate function to handle request result, uses dummy int constant
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -266,7 +232,6 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
                 // other 'case' lines to check for other permissions this app might request go below here
         }
     }
-    //custom dialog message to notify user
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(getActivity())
                 .setMessage(message)
@@ -274,5 +239,70 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
+    }
+
+    /////FORMATTING COLLEGE DATA FOR USER
+
+    private String getFormattedAdmissionsPercentage(String rawPercentage) {
+        Double percentageAsDouble = Double.parseDouble(rawPercentage);
+        int roundedPercentage = (int) Math.round(percentageAsDouble * 100);
+        return roundedPercentage + "%";
+    }
+
+    private void setEnrollmentText() {
+        switch (mCollege.getCarnegie_size_setting()) {
+            case 1:case 6:case 7:case 8:
+                mEnrolledStudentsLabel.setText(getString(R.string.verySmallEnrollment));
+                break;
+            case 2:
+                mEnrolledStudentsLabel.setText(getString(R.string.smallEnrollmentCC));
+                break;
+            case 9:case 10:case 11:
+                mEnrolledStudentsLabel.setText(getString(R.string.smallEnrollment));
+                break;
+            case 3:
+                mEnrolledStudentsLabel.setText(getString(R.string.mediumEnrollmentCC));
+                break;
+            case 4:case 12:case 13:case 14:
+                mEnrolledStudentsLabel.setText(getString(R.string.mediumEnrollment));
+                break;
+            case 5:case 15:case 16:case 17:
+                mEnrolledStudentsLabel.setText(getString(R.string.largeEnrolment));
+                break;
+            default:
+                mEnrolledStudentsLabel.setText(getString(R.string.noEnrollmentData));
+        }
+    }
+
+    private void setDegreeAwardText() {
+        if (mCollege.getCarnegie_size_setting() >= 6) {
+            mDegreeAwardedTextView.setText(getString(R.string.bachelorsDegreesAwardedIcon));
+            mDegreeAwardedLabelTextView.setText(getString(R.string.bachelorsDegreesAwardedText));
+        }
+    }
+
+    private void setResidentialText() {
+        if (mCollege.getCarnegie_size_setting() == 8 ||
+                mCollege.getCarnegie_size_setting() == 11 ||
+                mCollege.getCarnegie_size_setting() == 14 ||
+                mCollege.getCarnegie_size_setting() == 17) {
+            mResidentialIconTextView.setText(getString(R.string.residentialIcon));
+            mResidentialLabelTextView.setText(getString(R.string.residentialLabel));
+        } else if (mCollege.getCarnegie_size_setting() < 6 || mCollege.getCarnegie_size_setting() == 18) {
+            mResidentialIconTextView.setVisibility(View.GONE);
+            mResidentialLabelTextView.setVisibility(View.GONE);
+        }
+    }
+
+    private void setPartTimeText() {
+        if (mCollege.getCarnegie_size_setting() == 6 ||
+                mCollege.getCarnegie_size_setting() == 9 ||
+                mCollege.getCarnegie_size_setting() == 12 ||
+                mCollege.getCarnegie_size_setting() == 15) {
+            mPartTimeIconLabelTextView.setText(getString(R.string.partTimeLabel));
+        } else if (mCollege.getCarnegie_size_setting() < 6 || mCollege.getCarnegie_size_setting() == 18) {
+            mPartTimeIconLabelTextView.setVisibility(View.GONE);
+            mPartTimeIconTextView.setVisibility(View.GONE);
+        }
     }
 }

@@ -50,7 +50,23 @@
     <string name="carnegie_description_17">%s is a large school. It awards bachelor\'s degrees and has an enrollment of more than 10,000 students. Most students live on campus and attend full-time.</string>
     <string name="carnegie_description_18">%s is a special-focus institution.</string>
 
-    <string name="admission_percent" formatted="false">\n%s has an overall admission rate of %s</string>
+    <string name="bachelorsDegreesAwardedText">Bachelor\'s degrees awarded</string>
+    <string name="bachelorsDegreesAwardedIcon">&#xf19d;</string>
+
+    <string name="verySmallEnrollment">Less than 1,000 students</string>
+    <string name="smallEnrollmentCC">Less than 2,000 students</string>
+    <string name="smallEnrollment">Less than 3,000 students</string>
+    <string name="mediumEnrollmentCC">Less than 5,000 students</string>
+    <string name="mediumEnrollment">3,000 to 10,000 students</string>
+    <string name="largeEnrolment">More than 10,000 students</string>
+    <string name="noEnrollmentData">No enrollment data available</string>
+
+    <string name="residentialIcon">&#xf236;</string>
+    <string name="residentialLabel">Most students live on-campus</string>
+    <string name="partTimeLabel">Many students attend part-time</string>
+
+    <string name="admission_percent">%s overall admission rate</string>
+
     <string name="zip_code_search_hint">Or search by zip code...</string>
 
 </resources>

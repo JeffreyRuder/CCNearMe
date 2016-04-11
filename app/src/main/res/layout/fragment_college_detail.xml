@@ -70,19 +70,128 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="College Description"
-                        android:id="@+id/collegeDescription" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Overall Admission Rate"
-                        android:id="@+id/admissionPercentage" />
+                        <com.epicodus.ccnearme.views.FontAwesomeIconTextView
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="&#xf022;"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginRight="10dp"
+                            android:id="@+id/degreeAwarded" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Associate's degrees awarded"
+                            android:layout_toRightOf="@id/degreeAwarded"
+                            android:layout_toEndOf="@id/degreeAwarded"
+                            android:id="@+id/degreeAwardedLabel" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.epicodus.ccnearme.views.FontAwesomeIconTextView
+                            android:layout_width="20dp"
+                            android:textAlignment="center"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="&#xf007;"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginRight="10dp"
+                            android:id="@+id/enrolledStudents" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:layout_toRightOf="@id/enrolledStudents"
+                            android:layout_toEndOf="@id/enrolledStudents"
+                            android:id="@+id/enrolledStudentsLabel" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.epicodus.ccnearme.views.FontAwesomeIconTextView
+                            android:layout_width="20dp"
+                            android:textAlignment="center"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="&#xf00c;"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:id="@+id/admissionPercentage" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:layout_toRightOf="@id/admissionPercentage"
+                            android:layout_toEndOf="@id/admissionPercentage"
+                            android:id="@+id/admissionPercentageLabel" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.epicodus.ccnearme.views.FontAwesomeIconTextView
+                            android:layout_width="20dp"
+                            android:textAlignment="center"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="&#xf1b9;"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:id="@+id/residentialIcon" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:layout_toRightOf="@id/residentialIcon"
+                            android:layout_toEndOf="@id/residentialIcon"
+                            android:text="Many students live off-campus"
+                            android:id="@+id/residentialLabel" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.epicodus.ccnearme.views.FontAwesomeIconTextView
+                            android:layout_width="20dp"
+                            android:textAlignment="center"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="&#xf073;"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:id="@+id/partTimeIcon" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:layout_toRightOf="@id/partTimeIcon"
+                            android:layout_toEndOf="@id/partTimeIcon"
+                            android:text="Most students attend full-time"
+                            android:id="@+id/partTimeIconLabel" />
+
+                    </RelativeLayout>
+
                 </LinearLayout>
             </ScrollView>
 
