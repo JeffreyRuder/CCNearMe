@@ -6,7 +6,16 @@
 
 The [College Scorecard](https://collegescorecard.ed.gov/) is an effective website and a step forward in providing transparent information about colleges.
 
-College Near Me aims to highlight the most accurate and relevant parts of the College Scorecard Data set while adding geolocation and other native app functionality. Proximity plays a greater role in the college sections process for prospective college students than the media generally acknowledges. Why not make use of the geolocation capabilities and other features a phone provides?
+College Near Me aims to highlight the most accurate and relevant parts of the College Scorecard Data set while adding geolocation and other native app functionality. Proximity plays a greater role in the college sections process for prospective college students than the media generally acknowledges. This means highlighting nearby colleges would be worthwhile for uses.
+
+## Features
+
+* Login with Google or Facebook
+* View colleges near your location, or search for colleges near any zip code
+* Save colleges to review later
+* View information about the colleges and see their location in a Google MapView
+* Share individual colleges or your saved list
+* Intents to visit college price calculators and websites
 
 ## Technologies
 
@@ -18,15 +27,16 @@ Ensure you have Android Studio installed.
 
 Clone this repository into your AndroidStudioProjects directory.
 
-You will need to obtain API keys for [Data.gov](https://api.data.gov/) and [Google Maps](https://developers.google.com/maps/documentation/android-api/).
+You will need to obtain API keys for [Data.gov](https://api.data.gov/) and [Google Maps](https://developers.google.com/maps/documentation/android-api/). You will also need a [Facebook App ID](https://developers.facebook.com/apps).
 
-Then create a `keys.xml` file in the project's `app/res/values/` directory:
+Then create a `keys.xml` file in the project's `app/res/values/` directory, or add the strings to another resource file:
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="DATA_GOV_KEY">Your Key Here</string>
     <string name="GOOGLE_MAPS_KEY">Your Key Here</string>
+    <string name="facebook_app_id">Your App ID Here</string>
 </resources>
 ```
 
