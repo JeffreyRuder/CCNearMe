@@ -83,6 +83,8 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
 
     private ProgressDialog mLoadingProgressDialog;
 
+    private static final int SEARCH_RADIUS_IN_MILES = 18;
+
     private static final int PERMISSIONS_REQUEST_COARSE_LOCATION = 333555;
 
     /////LIFECYCLE
@@ -211,12 +213,12 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
                 item.setIcon(R.drawable.ic_thumb_down_black_24dp);
                 item.setChecked(false);
                 mEditor.putBoolean("include_private", false).commit();
-                getNearbyColleges(mLastZip, 18);
+                getNearbyColleges(mLastZip, SEARCH_RADIUS_IN_MILES);
             } else {
                 item.setIcon(R.drawable.ic_thumb_up_black_24dp);
                 item.setChecked(true);
                 mEditor.putBoolean("include_private", true).commit();
-                getNearbyColleges(mLastZip, 18);
+                getNearbyColleges(mLastZip, SEARCH_RADIUS_IN_MILES);
             }
             return true;
         } else if (id == R.id.nav_for_profit) {
@@ -224,12 +226,12 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
                 item.setIcon(R.drawable.ic_thumb_down_black_24dp);
                 item.setChecked(false);
                 mEditor.putBoolean("include_for_profit", false).commit();
-                getNearbyColleges(mLastZip, 18);
+                getNearbyColleges(mLastZip, SEARCH_RADIUS_IN_MILES);
             } else {
                 item.setIcon(R.drawable.ic_thumb_up_black_24dp);
                 item.setChecked(true);
                 mEditor.putBoolean("include_for_profit", true).commit();
-                getNearbyColleges(mLastZip, 18);
+                getNearbyColleges(mLastZip, SEARCH_RADIUS_IN_MILES);
             }
             return true;
         }
@@ -306,7 +308,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
 
     private void getCollegesByZip(String zip) {
         final CollegeScorecardService collegeScorecardService = new CollegeScorecardService(this);
-        collegeScorecardService.findColleges(zip, 18, new Callback() {
+        collegeScorecardService.findColleges(zip, SEARCH_RADIUS_IN_MILES, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -360,7 +362,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     mLastZip = geocodeService.processZipResults(response);
-                    getNearbyColleges(mLastZip, 18);
+                    getNearbyColleges(mLastZip, SEARCH_RADIUS_IN_MILES);
                 }
             });
         }
