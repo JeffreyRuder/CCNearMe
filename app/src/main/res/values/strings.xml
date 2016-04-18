@@ -67,6 +67,8 @@
 
     <string name="admission_percent">%s overall admission rate</string>
 
-    <string name="zip_code_search_hint">Or search by zip code...</string>
+    <string name="zip_code_search_hint">Or search by zip code…</string>
+    <string name="searching_nearby">Updating list of nearby colleges…</string>
+    <string name="searching">Searching</string>
 
 </resources>
