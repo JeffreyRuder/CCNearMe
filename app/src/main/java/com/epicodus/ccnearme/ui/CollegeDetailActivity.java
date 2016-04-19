@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.adapters.CollegePagerAdapter;
 import com.epicodus.ccnearme.models.College;
-import com.epicodus.ccnearme.util.ScaleAndFadePageTransformer;
+import com.epicodus.ccnearme.util.DepthPageTransformer;
 
 import org.parceler.Parcels;
 
@@ -29,7 +29,7 @@ public class CollegeDetailActivity extends AppCompatActivity {
         int startingPosition = Integer.parseInt(getIntent().getStringExtra("position"));
         CollegePagerAdapter adapterViewPager = new CollegePagerAdapter(getSupportFragmentManager(), mColleges);
         mViewPager.setAdapter(adapterViewPager);
-        mViewPager.setPageTransformer(true, new ScaleAndFadePageTransformer());
+        mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mViewPager.setCurrentItem(startingPosition);
     }
 }
