@@ -3,6 +3,7 @@ package com.epicodus.ccnearme.services;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.epicodus.ccnearme.Constants;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 
@@ -37,7 +38,7 @@ public class CollegeScorecardService {
 
     public CollegeScorecardService(Context context) {
         mContext = context;
-        API_KEY = mContext.getString(R.string.DATA_GOV_KEY);
+        API_KEY = Constants.DATA_GOV_KEY;
         THREE_YEARS_AGO = "2013";
         mSharedPreferences = mContext.getSharedPreferences(mContext.getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
         mIncludePrivate = mSharedPreferences.getBoolean("include_private", true);

@@ -1,12 +1,7 @@
 package com.epicodus.ccnearme.util;
 
-import com.firebase.ui.auth.core.AuthProviderType;
-import com.firebase.ui.auth.core.FirebaseAuthProvider;
-import com.firebase.ui.auth.core.FirebaseLoginDialog;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +12,9 @@ import android.widget.EditText;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.ui.R;
+import com.firebase.ui.auth.core.AuthProviderType;
+import com.firebase.ui.auth.core.FirebaseAuthProvider;
+import com.firebase.ui.auth.core.FirebaseLoginDialog;
 import com.firebase.ui.auth.core.FirebaseLoginError;
 import com.firebase.ui.auth.core.TokenAuthHandler;
 import com.firebase.ui.auth.google.GoogleAuthProvider;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
+import com.epicodus.ccnearme.Constants;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 import com.fasterxml.jackson.databind.util.JSONPObject;
@@ -32,40 +33,7 @@ public class GeocodeService {
 
     public GeocodeService(Context context) {
         mContext = context;
-        API_KEY = mContext.getString(R.string.GOOGLE_MAPS_KEY);
-    }
-
-    public void getLocation(College college, Callback callback) {
-
-        OkHttpClient client = new OkHttpClient.Builder().build();
-
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://maps.googleapis.com/maps/api/geocode/json").newBuilder();
-        urlBuilder.addQueryParameter("address", college.getCity() + ", " + college.getState());
-        urlBuilder.addQueryParameter("key", API_KEY);
-
-        String url = urlBuilder.build().toString();
-
-        Request request = new Request.Builder().url(url).build();
-        Call call = client.newCall(request);
-        call.enqueue(callback);
-    }
-
-    public void setLocation(College college, Response response) {
-
-        try {
-            String jsonData = response.body().string();
-            if (response.isSuccessful()) {
-                JSONObject responseJSON = new JSONObject(jsonData);
-                JSONArray locationResults = responseJSON.getJSONArray("results");
-                Double lat = locationResults.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lat");
-                Double lng = locationResults.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lng");
-
-                LatLng latLng = new LatLng(lat, lng);
-                college.setLatLng(latLng);
-            }
-        } catch (IOException | JSONException exception) {
-            exception.printStackTrace();
-        }
+        API_KEY = Constants.GOOGLE_MAPS_KEY;
     }
 
     public void getZipFromLocation(Location location, Callback callback) {

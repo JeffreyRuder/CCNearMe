@@ -242,16 +242,18 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
 
     private void initializeNavigationDrawer() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        if (mIncludeForProfit) {
-            MenuItem item = navigationView.getMenu().findItem(R.id.nav_for_profit);
-            item.setChecked(true);
-            item.setIcon(R.drawable.ic_thumb_up_black_24dp);
-        }
-        if (mIncludePrivate) {
-            MenuItem item = navigationView.getMenu().findItem(R.id.nav_private);
-            item.setChecked(true);
-            item.setIcon(R.drawable.ic_thumb_up_black_24dp);
+        if (navigationView != null) {
+            navigationView.setNavigationItemSelectedListener(this);
+            if (mIncludeForProfit) {
+                MenuItem item = navigationView.getMenu().findItem(R.id.nav_for_profit);
+                item.setChecked(true);
+                item.setIcon(R.drawable.ic_thumb_up_black_24dp);
+            }
+            if (mIncludePrivate) {
+                MenuItem item = navigationView.getMenu().findItem(R.id.nav_private);
+                item.setChecked(true);
+                item.setIcon(R.drawable.ic_thumb_up_black_24dp);
+            }
         }
     }
 
