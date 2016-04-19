@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.adapters.CollegePagerAdapter;
 import com.epicodus.ccnearme.models.College;
+import com.epicodus.ccnearme.util.ScaleAndFadePageTransformer;
 
 import org.parceler.Parcels;
 
@@ -17,7 +18,6 @@ import butterknife.ButterKnife;
 
 public class CollegeDetailActivity extends AppCompatActivity {
     @Bind(R.id.viewPager) ViewPager mViewPager;
-    private CollegePagerAdapter adapterViewPager;
     ArrayList<College> mColleges = new ArrayList<>();
 
     @Override
@@ -27,8 +27,9 @@ public class CollegeDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mColleges = Parcels.unwrap(getIntent().getParcelableExtra("colleges"));
         int startingPosition = Integer.parseInt(getIntent().getStringExtra("position"));
-        adapterViewPager = new CollegePagerAdapter(getSupportFragmentManager(), mColleges);
+        CollegePagerAdapter adapterViewPager = new CollegePagerAdapter(getSupportFragmentManager(), mColleges);
         mViewPager.setAdapter(adapterViewPager);
+        mViewPager.setPageTransformer(true, new ScaleAndFadePageTransformer());
         mViewPager.setCurrentItem(startingPosition);
     }
 }
