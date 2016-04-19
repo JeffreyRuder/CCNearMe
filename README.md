@@ -29,15 +29,11 @@ Clone this repository into your AndroidStudioProjects directory.
 
 You will need to obtain API keys for [Data.gov](https://api.data.gov/) and [Google Maps](https://developers.google.com/maps/documentation/android-api/). You will also need a [Facebook App ID](https://developers.facebook.com/apps).
 
-Then create a `keys.xml` file in the project's `app/res/values/` directory, or add the strings to another resource file:
+Then add the Facebook App ID as a string resource in `strings.xml` and add the API keys to your `gradle.properties` file:
 
 ```
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="DATA_GOV_KEY">Your Key Here</string>
-    <string name="GOOGLE_MAPS_KEY">Your Key Here</string>
-    <string name="facebook_app_id">Your App ID Here</string>
-</resources>
+DataGovKey = "Your Key Here"
+GoogleMapsKey = "Your Key Here"
 ```
 
 Use AVD Manager to run the project on a virtual device, or connect an Android phone with USB debugging enabled to run on a real device.
