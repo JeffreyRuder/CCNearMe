@@ -308,8 +308,15 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
         });
     }
 
-    private void getCollegesByZip(String zip) {
+    private void getCollegesByZip(final String zip) {
         final CollegeScorecardService collegeScorecardService = new CollegeScorecardService(this);
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mLoadingProgressDialog.setMessage("Searching for colleges near " + zip);
+                mLoadingProgressDialog.show();
+            }
+        });
         collegeScorecardService.findColleges(zip, SEARCH_RADIUS_IN_MILES, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
