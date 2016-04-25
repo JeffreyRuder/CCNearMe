@@ -29,6 +29,8 @@
     <string name="main_activity_none_nearby">There are no nearby colleges.</string>
 
     <string name="shared_preferences_file">com.epicodus.ccnearme.PREFERENCE_FILE_KEY</string>
+    <string name="google_maps_key">AIzaSyAx9aD6olsb1aJVUxPiiWey6NfIE4Sza38</string>
+
     <string name="details">Details</string>
 
     <string name="carnegie_description_1">%s is a very small school. It awards associate\'s degrees, and has an enrollment of less than 500 students.</string>
@@ -70,5 +72,6 @@
     <string name="zip_code_search_hint">Or search by zip code…</string>
     <string name="searching_nearby">Updating list of nearby colleges…</string>
     <string name="searching">Searching</string>
+    <string name="feedback">Feedback about College Near Me app</string>
 
 </resources>

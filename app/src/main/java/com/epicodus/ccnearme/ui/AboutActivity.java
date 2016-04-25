@@ -3,10 +3,9 @@ package com.epicodus.ccnearme.ui;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
@@ -20,6 +19,7 @@ import butterknife.ButterKnife;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.aboutPoweredByText) TextView mPoweredByTextView;
+    @Bind(R.id.fab) FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,18 +30,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         ButterKnife.bind(this);
 
         mPoweredByTextView.setOnClickListener(this);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        mFab.setOnClickListener(this);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -49,6 +41,14 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         if (v == mPoweredByTextView) {
             Uri website = Uri.parse("https://collegescorecard.ed.gov/data/");
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
+            if (isSafe(intent)) {
+                startActivity(intent);
+            }
+        } else if (v == mFab) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"collegenearmeapp@gmail.com"});
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback));
             if (isSafe(intent)) {
                 startActivity(intent);
             }

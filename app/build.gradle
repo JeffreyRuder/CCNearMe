@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.epicodus.ccnearme"
@@ -25,6 +25,8 @@ android {
         it.buildConfigField 'String', 'DATA_GOV_KEY', DataGovKey
         it.buildConfigField 'String', 'GOOGLE_MAPS_KEY', GoogleMapsKey
     }
+
+
 }
 
 dependencies {
@@ -33,16 +35,17 @@ dependencies {
 
     apt 'org.parceler:parceler:1.0.4'
 
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.android.support:recyclerview-v7:23.2.1'
-    compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:recyclerview-v7:23.3.0'
+    compile 'com.android.support:support-v4:23.3.0'
 
     //Play Services for Google Maps
-    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.android.gms:play-services-maps:8.4.0'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
 
     //Login Providers
-    compile 'com.google.android.gms:play-services-auth:8.3.0'
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
 
     //Firebase and Firebase UI
