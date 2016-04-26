@@ -1,35 +1,35 @@
 package com.epicodus.ccnearme.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.epicodus.ccnearme.CollegeApplication;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.adapters.FirebaseCollegeListAdapter;
 import com.epicodus.ccnearme.models.College;
-import com.epicodus.ccnearme.views.DividerItemDecoration;
-import com.firebase.client.ChildEventListener;
+import com.epicodus.ccnearme.util.OnStartDragListener;
+import com.epicodus.ccnearme.util.SimpleItemTouchHelperCallback;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
-import java.util.ArrayList;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SavedCollegeListActivity extends AppCompatActivity implements View.OnClickListener {
+public class SavedCollegeListActivity extends AppCompatActivity implements View.OnClickListener, OnStartDragListener {
     private Query mQuery;
     private Firebase mFirebaseRef;
     private FirebaseCollegeListAdapter mAdapter;
+    private ItemTouchHelper mItemTouchHelper;
 
     @Bind(R.id.recyclerView) RecyclerView mCollegeRecyclerView;
     @Bind(R.id.floatingActionButton) FloatingActionButton mFloatingActionButton;
@@ -53,17 +53,30 @@ public class SavedCollegeListActivity extends AppCompatActivity implements View.
         setUpRecyclerView();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        for (College college : mAdapter.getItems()) {
+            college.setIndex(Integer.toString(mAdapter.getItems().indexOf(college)));
+            mFirebaseRef.child("savedcolleges/" + mFirebaseRef.getAuth().getUid() + "/"
+                    + college.getId())
+                    .setValue(college);
+        }
+    }
+
     private void setUpFirebaseQuery() {
-        mQuery = mFirebaseRef.child("savedcolleges/" + mFirebaseRef.getAuth().getUid());
+        mQuery = mFirebaseRef.child("savedcolleges/" + mFirebaseRef.getAuth().getUid()).orderByChild("index");
     }
 
     private void setUpRecyclerView() {
-       mAdapter = new FirebaseCollegeListAdapter(mQuery, College.class);
+       mAdapter = new FirebaseCollegeListAdapter(mQuery, College.class, this);
        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(SavedCollegeListActivity.this);
        mCollegeRecyclerView.setLayoutManager(layoutManager);
        mCollegeRecyclerView.setHasFixedSize(true);
-       mCollegeRecyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), R.drawable.divider_shadow));
        mCollegeRecyclerView.setAdapter(mAdapter);
+       ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+       mItemTouchHelper = new ItemTouchHelper(callback);
+       mItemTouchHelper.attachToRecyclerView(mCollegeRecyclerView);
     }
 
     @Override
@@ -90,5 +103,10 @@ public class SavedCollegeListActivity extends AppCompatActivity implements View.
                 }
             });
         }
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }

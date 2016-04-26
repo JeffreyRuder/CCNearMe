@@ -25,6 +25,7 @@ public class College {
     public Double lat;
     public Double lng;
     public String admissionPercentage;
+    public String index;
 
     public College(){}
 
@@ -44,6 +45,7 @@ public class College {
         this.priceCalculatorUrl = price_calculator_url;
         this.collegeMainUrl = college_main_url;
         this.admissionPercentage = admissionPercentage;
+        this.index = "Not specified";
     }
 
     public int getId() {
@@ -104,6 +106,14 @@ public class College {
 
     public Double getLng() {
         return lng;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
     }
 
     @JsonIgnore
