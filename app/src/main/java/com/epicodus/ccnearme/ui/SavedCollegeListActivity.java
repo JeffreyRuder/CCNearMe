@@ -73,16 +73,16 @@ public class SavedCollegeListActivity extends AppCompatActivity implements View.
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String names = "";
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        String name = (String) child.child("name").getValue();
+                    for (DataSnapshot college : dataSnapshot.getChildren()) {
+                        String name = (String) college.child("name").getValue();
                         names += name + "\n";
                     }
                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                     intent.setType("text/plain");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "My College List");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.my_college_list));
                     intent.putExtra(Intent.EXTRA_TEXT, names);
-                    startActivity(Intent.createChooser(intent, "How do you want to share?"));
+                    startActivity(Intent.createChooser(intent, getString(R.string.how_to_share)));
                 }
 
                 @Override

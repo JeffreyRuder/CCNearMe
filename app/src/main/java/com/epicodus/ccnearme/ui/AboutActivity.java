@@ -1,7 +1,6 @@
 package com.epicodus.ccnearme.ui;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,8 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.epicodus.ccnearme.R;
-
-import java.util.List;
+import com.epicodus.ccnearme.util.IntentSafetyCheck;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,25 +37,19 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v == mPoweredByTextView) {
-            Uri website = Uri.parse("https://collegescorecard.ed.gov/data/");
+            Uri website = Uri.parse(getString(R.string.college_scorecard_data_url));
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
-            if (isSafe(intent)) {
+            if (IntentSafetyCheck.isSafe(this, intent)) {
                 startActivity(intent);
             }
         } else if (v == mFab) {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"collegenearmeapp@gmail.com"});
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.app_email_address)});
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback));
-            if (isSafe(intent)) {
+            if (IntentSafetyCheck.isSafe(this, intent)) {
                 startActivity(intent);
             }
         }
-    }
-
-    private boolean isSafe(Intent intent) {
-        PackageManager packageManager = this.getPackageManager();
-        List activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return activities.size() > 0;
     }
 }

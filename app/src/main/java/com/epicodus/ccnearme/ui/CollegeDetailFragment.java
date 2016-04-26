@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.epicodus.ccnearme.CollegeApplication;
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
+import com.epicodus.ccnearme.util.IntentSafetyCheck;
 import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,7 +35,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.parceler.Parcels;
 
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -148,7 +148,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         if (v == mPriceCalculatorButton) {
             Uri website = Uri.parse("http://" + mCollege.getPriceCalculatorUrl());
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
-            if (isSafe(intent)) {
+            if (IntentSafetyCheck.isSafe(getContext(), intent)) {
                 startActivity(intent);
             }
         } else if (v == mShareCollegeButton) {
@@ -164,16 +164,10 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
         } else if (v == mCollegeNameTextView) {
             Uri website = Uri.parse("http://" + mCollege.getCollegeMainUrl());
             Intent intent = new Intent(Intent.ACTION_VIEW, website);
-            if (isSafe(intent)) {
+            if (IntentSafetyCheck.isSafe(getContext(), intent)) {
                 startActivity(intent);
             }
         }
-    }
-
-    private boolean isSafe(Intent intent) {
-        PackageManager packageManager = getActivity().getPackageManager();
-        List activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return activities.size() > 0;
     }
 
     /////GOOGLE MAP
