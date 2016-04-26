@@ -60,7 +60,8 @@ public class FirebaseCollegeListAdapter extends FirebaseRecyclerAdapter<CollegeR
     @Override
     public void onItemDismiss(int position) {
         Firebase ref = CollegeApplication.getAppInstance().getFirebaseRef();
-        ref.child("savedcolleges/" + ref.getAuth().getUid() + "/" + getItem(position).getName()).removeValue();
+        Firebase college = ref.child("savedcolleges/" + ref.getAuth().getUid() + "/" + getItem(position).getId());
+        college.removeValue();
     }
 
     @Override
