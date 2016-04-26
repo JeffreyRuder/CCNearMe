@@ -53,8 +53,19 @@ public class SavedCollegeListActivity extends AppCompatActivity implements View.
         setUpRecyclerView();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        for (College college : mAdapter.getItems()) {
+            college.setIndex(Integer.toString(mAdapter.getItems().indexOf(college)));
+            mFirebaseRef.child("savedcolleges/" + mFirebaseRef.getAuth().getUid() + "/"
+                    + college.getId())
+                    .setValue(college);
+        }
+    }
+
     private void setUpFirebaseQuery() {
-        mQuery = mFirebaseRef.child("savedcolleges/" + mFirebaseRef.getAuth().getUid());
+        mQuery = mFirebaseRef.child("savedcolleges/" + mFirebaseRef.getAuth().getUid()).orderByChild("index");
     }
 
     private void setUpRecyclerView() {

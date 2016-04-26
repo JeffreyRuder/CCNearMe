@@ -88,7 +88,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Associate's degrees awarded"
+                            android:text="@string/associatesDegreesAwardedText"
                             android:layout_toRightOf="@id/degreeAwarded"
                             android:layout_toEndOf="@id/degreeAwarded"
                             android:id="@+id/degreeAwardedLabel" />
