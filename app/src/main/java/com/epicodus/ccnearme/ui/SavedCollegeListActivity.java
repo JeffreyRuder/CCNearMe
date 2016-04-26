@@ -16,7 +16,6 @@ import com.epicodus.ccnearme.adapters.FirebaseCollegeListAdapter;
 import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.util.OnStartDragListener;
 import com.epicodus.ccnearme.util.SimpleItemTouchHelperCallback;
-import com.epicodus.ccnearme.views.DividerItemDecoration;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -63,7 +62,6 @@ public class SavedCollegeListActivity extends AppCompatActivity implements View.
        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(SavedCollegeListActivity.this);
        mCollegeRecyclerView.setLayoutManager(layoutManager);
        mCollegeRecyclerView.setHasFixedSize(true);
-//       mCollegeRecyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), R.drawable.divider_shadow));
        mCollegeRecyclerView.setAdapter(mAdapter);
        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
        mItemTouchHelper = new ItemTouchHelper(callback);
