@@ -71,7 +71,6 @@ public class FirebaseCollegeListAdapter extends FirebaseRecyclerAdapter<CollegeR
 
     @Override
     protected void itemAdded(College item, String key, int position) {
-
     }
 
     @Override

@@ -1,180 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin">
+    android:paddingStart="2dp"
+    android:paddingEnd="2dp"
+    >
 
-
-
-    <RelativeLayout
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        card_view:contentPadding="@dimen/activity_horizontal_margin"
+        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="1dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardPreventCornerOverlap="false">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="18sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="Collin County Community College"
-            android:id="@+id/collegeNameTextView" />
+            android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:id="@+id/dragIconImageView"
-            android:layout_gravity="right"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_reorder_black_24dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toStartOf="@+id/dragIconImageView"
+                    android:layout_toLeftOf="@+id/dragIconImageView"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="@string/card_placeholder_college_name"
+                    android:id="@+id/collegeNameTextView" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Plano, TX"
-        android:id="@+id/collegeCityTextView" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_below="@id/collegeNameTextView"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/card_placeholder_college_city"
+                    android:id="@+id/collegeCityTextView" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:id="@+id/iconRow">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/dragIconImageView"
+                    android:contentDescription="@string/reorder_icon"
+                    android:layout_gravity="end"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_reorder_black_24dp" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            </RelativeLayout>
 
-            <com.epicodus.ccnearme.views.FontAwesomeIconTextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_margin="6dp"
-                android:textSize="18sp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:id="@+id/publicPrivateIcon"/>
+                android:paddingTop="5dp"
+                android:id="@+id/iconRow">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/publicPrivateIcon"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/publicPrivateIconLabel" />
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" >
-        </Space>
+                    <com.epicodus.ccnearme.views.FontAwesomeIconTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_margin="6dp"
+                        android:textSize="18sp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="center"
+                        android:id="@+id/publicPrivateIcon"/>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/publicPrivateIcon"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="center"
+                        android:textSize="12sp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:id="@+id/publicPrivateIconLabel" />
+                </RelativeLayout>
 
-            <com.epicodus.ccnearme.views.FontAwesomeIconTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_margin="6dp"
-                android:textSize="18sp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:id="@+id/profitNonprofitIcon"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" >
+                </Space>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/profitNonprofitIcon"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/profitNonprofitIconLabel" />
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" >
-        </Space>
+                    <com.epicodus.ccnearme.views.FontAwesomeIconTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_margin="6dp"
+                        android:textSize="18sp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="center"
+                        android:id="@+id/profitNonprofitIcon"/>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/profitNonprofitIcon"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="center"
+                        android:textSize="12sp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:id="@+id/profitNonprofitIconLabel" />
+                </RelativeLayout>
 
-            <com.epicodus.ccnearme.views.FontAwesomeIconTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_margin="6dp"
-                android:textSize="18sp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:id="@+id/urbanRuralIcon"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" >
+                </Space>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/urbanRuralIcon"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/urbanRuralIconLabel" />
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" >
-        </Space>
+                    <com.epicodus.ccnearme.views.FontAwesomeIconTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_margin="6dp"
+                        android:textSize="18sp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="center"
+                        android:id="@+id/urbanRuralIcon"/>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/urbanRuralIcon"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="center"
+                        android:textSize="12sp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:id="@+id/urbanRuralIconLabel" />
+                </RelativeLayout>
 
-            <com.epicodus.ccnearme.views.FontAwesomeIconTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_margin="6dp"
-                android:textSize="18sp"
-                android:text="@string/icon_multi_campus"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:id="@+id/numberCampusesIcon"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" >
+                </Space>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/numberCampusesIcon"
-                android:layout_centerHorizontal="true"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:text="@string/icon_multi_campus_label"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/numberCampusesIconLabel" />
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-    </LinearLayout>
+                    <com.epicodus.ccnearme.views.FontAwesomeIconTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_margin="6dp"
+                        android:textSize="18sp"
+                        android:text="@string/icon_multi_campus"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="center"
+                        android:id="@+id/numberCampusesIcon"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/numberCampusesIcon"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:text="@string/icon_multi_campus_label"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:id="@+id/numberCampusesIconLabel" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>
