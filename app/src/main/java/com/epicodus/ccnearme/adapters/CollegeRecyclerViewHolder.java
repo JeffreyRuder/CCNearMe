@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epicodus.ccnearme.R;
 import com.epicodus.ccnearme.models.College;
 import com.epicodus.ccnearme.ui.CollegeDetailActivity;
+import com.epicodus.ccnearme.util.ItemTouchHelperViewHolder;
 
 import org.parceler.Parcels;
 
@@ -19,7 +21,7 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CollegeRecyclerViewHolder extends RecyclerView.ViewHolder {
+public class CollegeRecyclerViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
     @Bind(R.id.collegeNameTextView)
     TextView mCollegeNameTextView;
     @Bind(R.id.collegeCityTextView) TextView mCollegeCityTextView;
@@ -31,6 +33,7 @@ public class CollegeRecyclerViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.urbanRuralIconLabel) TextView mUrbanRuralLabel;
     @Bind(R.id.numberCampusesIcon) TextView mNumberCampuses;
     @Bind(R.id.numberCampusesIconLabel) TextView mNumberCampusesLabel;
+    public ImageView mDragIcon;
     private Context mContext;
     ArrayList<College> mColleges = new ArrayList<>();
 
@@ -39,6 +42,10 @@ public class CollegeRecyclerViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
         mColleges = colleges;
+        if (itemView.findViewById(R.id.dragIconImageView) != null) {
+            mDragIcon = (ImageView) itemView.findViewById(R.id.dragIconImageView);
+        }
+
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,5 +77,15 @@ public class CollegeRecyclerViewHolder extends RecyclerView.ViewHolder {
             mNumberCampuses.setVisibility(View.VISIBLE);
             mNumberCampusesLabel.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onItemSelected() {
+        //add animation
+    }
+
+    @Override
+    public void onItemClear() {
+        //add animation
     }
 }
