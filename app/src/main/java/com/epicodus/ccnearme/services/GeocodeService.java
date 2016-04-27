@@ -2,20 +2,14 @@ package com.epicodus.ccnearme.services;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 import com.epicodus.ccnearme.Constants;
-import com.epicodus.ccnearme.R;
-import com.epicodus.ccnearme.models.College;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -24,9 +18,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by Jeffrey on 3/29/2016.
- */
+
 public class GeocodeService {
     private Context mContext;
     private final String API_KEY;

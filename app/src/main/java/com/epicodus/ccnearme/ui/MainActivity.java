@@ -40,14 +40,19 @@ import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -57,7 +62,8 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class MainActivity extends ModifiedFirebaseLoginBaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -66,6 +72,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     @Bind(R.id.collegesNearYouNumberTextView) TextView mCollegesNearYouNumberTextView;
     @Bind(R.id.zipInput) EditText mZipInput;
     @Bind(R.id.zipSearchButton) Button mZipSearchButton;
+    @Bind(R.id.lastUpdateTextView) TextView mLastUpdateTextView;
 
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
@@ -75,6 +82,8 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     private ArrayList<College> mNearbyColleges = new ArrayList<>();
     private Firebase mFirebaseRef;
     private GoogleApiClient mGoogleApiClient;
+
+    private LocationRequest mLocationRequest;
     private Location mLastLocation;
     private String mLastZip;
 
@@ -84,7 +93,6 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     private ProgressDialog mLoadingProgressDialog;
 
     private static final int SEARCH_RADIUS_IN_MILES = 18;
-
     private static final int PERMISSIONS_REQUEST_COARSE_LOCATION = 333555;
 
     /////LIFECYCLE
@@ -125,6 +133,20 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
         setEnabledAuthProvider(AuthProviderType.FACEBOOK);
         setEnabledAuthProvider(AuthProviderType.GOOGLE);
         checkForUserAuthentication();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mGoogleApiClient.isConnected()) {
+            getLocationUpdates();
+        }
     }
 
     @Override
@@ -333,32 +355,6 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
         });
     }
 
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            useLastLocationToSearchForColleges();
-        } else {
-            showMessageOKCancel("Allow access to your location to see colleges near you.",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_COARSE_LOCATION);
-                        }
-                    });
-        }
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(MainActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
     public void useLastLocationToSearchForColleges() {
         if (mLastLocation != null) {
             final GeocodeService geocodeService = new GeocodeService(this);
@@ -377,6 +373,15 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
         }
     }
 
+    /////GOOGLE API CONNECTIONS
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        initializeLocationRequest();
+        getLocationUpdates();
+        useLastLocationToSearchForColleges();
+    }
+
     @Override
     public void onConnectionSuspended(int i) {
         showErrorDialog("Failed to determine your location. Please search by zip code instead.");
@@ -385,6 +390,49 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         showErrorDialog("Failed to determine your location. Please search by zip code instead.");
+    }
+
+    /////UPDATE LOCATION
+
+    private void initializeLocationRequest() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            mLocationRequest = new LocationRequest();
+            mLocationRequest.setInterval(10000);
+            mLocationRequest.setFastestInterval(5000);
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        } else {
+            showMessageOKCancel("Allow access to your location to see colleges near you.",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_COARSE_LOCATION);
+                        }
+                    });
+        }
+    }
+
+    private void getLocationUpdates() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } else {
+            showMessageOKCancel("Allow access to your location to see colleges near you.",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_COARSE_LOCATION);
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+        String updateTime = DateFormat.getTimeInstance().format(new Date());
+        mLastUpdateTextView.setText(String.format(Locale.US, getString(R.string.location_last_changed), updateTime));
+        useLastLocationToSearchForColleges();
     }
 
     /////SHARED PREFERENCES FOR CONTROLLING SEARCH PARAMETERS
@@ -475,11 +523,19 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
                 .show();
     }
 
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
     private void initializeProgressDialog() {
         mLoadingProgressDialog = new ProgressDialog(this);
         mLoadingProgressDialog.setTitle(getString(R.string.searching));
         mLoadingProgressDialog.setMessage(getString(R.string.searching_nearby));
         mLoadingProgressDialog.setCancelable(false);
     }
-
 }

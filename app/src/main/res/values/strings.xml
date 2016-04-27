@@ -76,6 +76,7 @@
     <string name="how_to_share">How do you want to share?</string>
 
     <string name="main_activity_none_nearby">There are no nearby colleges.</string>
+    <string name="location_last_changed">"Your location last changed at %s"</string>
 
     <string name="city_state" formatted="false">%s, %s</string>
     <string name="city_state_zip" formatted="false">%s, %s %d</string>

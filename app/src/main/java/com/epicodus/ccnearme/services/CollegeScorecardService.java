@@ -21,9 +21,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by Jeffrey on 3/25/2016.
- */
 public class CollegeScorecardService {
     private Context mContext;
     private final String API_KEY;
@@ -33,16 +30,15 @@ public class CollegeScorecardService {
     private final String INCLUDED_OWNERSHIPS;
     private boolean mIncludePrivate;
     private boolean mIncludeForProfit;
-    private SharedPreferences mSharedPreferences;
     private final String THREE_YEARS_AGO;
 
     public CollegeScorecardService(Context context) {
         mContext = context;
         API_KEY = Constants.DATA_GOV_KEY;
         THREE_YEARS_AGO = "2013";
-        mSharedPreferences = mContext.getSharedPreferences(mContext.getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
-        mIncludePrivate = mSharedPreferences.getBoolean("include_private", true);
-        mIncludeForProfit = mSharedPreferences.getBoolean("include_for_profit", true);
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(mContext.getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
+        mIncludePrivate = sharedPreferences.getBoolean("include_private", true);
+        mIncludeForProfit = sharedPreferences.getBoolean("include_for_profit", true);
 
         if (mIncludeForProfit && mIncludePrivate) {
             INCLUDED_OWNERSHIPS = "1,2,3";
