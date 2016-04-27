@@ -415,6 +415,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     private void getLocationUpdates() {
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
             showMessageOKCancel("Allow access to your location to see colleges near you.",
