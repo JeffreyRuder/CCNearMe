@@ -56,12 +56,7 @@ public class SavedCollegeListActivity extends AppCompatActivity implements View.
     @Override
     protected void onPause() {
         super.onPause();
-        for (College college : mAdapter.getItems()) {
-            college.setIndex(Integer.toString(mAdapter.getItems().indexOf(college)));
-            mFirebaseRef.child("savedcolleges/" + mFirebaseRef.getAuth().getUid() + "/"
-                    + college.getId())
-                    .setValue(college);
-        }
+        saveUserOrder();
     }
 
     private void setUpFirebaseQuery() {
@@ -82,6 +77,7 @@ public class SavedCollegeListActivity extends AppCompatActivity implements View.
     @Override
     public void onClick(View v) {
         if (v == mFloatingActionButton) {
+            saveUserOrder();
             mQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -108,5 +104,14 @@ public class SavedCollegeListActivity extends AppCompatActivity implements View.
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
+    }
+
+    protected void saveUserOrder() {
+        for (College college : mAdapter.getItems()) {
+            college.setIndex(Integer.toString(mAdapter.getItems().indexOf(college)));
+            mFirebaseRef.child("savedcolleges/" + mFirebaseRef.getAuth().getUid() + "/"
+                    + college.getId())
+                    .setValue(college);
+        }
     }
 }
