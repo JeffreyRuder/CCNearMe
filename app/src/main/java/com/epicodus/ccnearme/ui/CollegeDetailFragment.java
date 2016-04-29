@@ -64,7 +64,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     private College mCollege;
     private Firebase mFirebaseRef;
     private String mCurrentUser;
-    private static final int PERMISSIONS_REQUEST_COARSE_LOCATION = 333555;
+    private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 333555;
 
     public static CollegeDetailFragment newInstance(College college) {
         CollegeDetailFragment collegeDetailFragment = new CollegeDetailFragment();
@@ -178,7 +178,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                int permissionCheck = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+                int permissionCheck = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
                 if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
                     googleMap.setMyLocationEnabled(true);
                 } else {
@@ -186,7 +186,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_COARSE_LOCATION);
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_FINE_LOCATION);
                                 }
                             });
                     return;
@@ -211,7 +211,7 @@ public class CollegeDetailFragment extends Fragment implements View.OnClickListe
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_COARSE_LOCATION: {
+            case PERMISSIONS_REQUEST_FINE_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getActivity(), "Thank You", Toast.LENGTH_SHORT)
                             .show();

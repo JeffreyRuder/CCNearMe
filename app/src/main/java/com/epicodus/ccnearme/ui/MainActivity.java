@@ -93,7 +93,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     private ProgressDialog mLoadingProgressDialog;
 
     private static final int SEARCH_RADIUS_IN_MILES = 18;
-    private static final int PERMISSIONS_REQUEST_COARSE_LOCATION = 333555;
+    private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 333555;
 
     /////LIFECYCLE
 
@@ -121,14 +121,14 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
         mFirebaseRef = CollegeApplication.getAppInstance().getFirebaseRef();
         initializeSharedPreferences();
         initializeNavigationDrawer();
-        initializeApiClient();
         initializeProgressDialog();
-        mGoogleApiClient.connect();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        initializeApiClient();
+        mGoogleApiClient.connect();
         // All providers are optional! Remove any you don't want.
         setEnabledAuthProvider(AuthProviderType.FACEBOOK);
         setEnabledAuthProvider(AuthProviderType.GOOGLE);
@@ -148,6 +148,9 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
         super.onResume();
         if (mGoogleApiClient.isConnected()) {
             getLocationUpdates();
+        } else {
+            initializeApiClient();
+            mGoogleApiClient.connect();
         }
     }
 
@@ -397,34 +400,36 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     /////UPDATE LOCATION
 
     private void initializeLocationRequest() {
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             mLocationRequest = new LocationRequest();
-            mLocationRequest.setInterval(10000);
-            mLocationRequest.setFastestInterval(5000);
-            mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+            mLocationRequest.setInterval(200000);
+            mLocationRequest.setFastestInterval(50000);
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         } else {
             showMessageOKCancel("Allow access to your location to see colleges near you.",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_COARSE_LOCATION);
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_FINE_LOCATION);
                         }
                     });
         }
     }
 
     private void getLocationUpdates() {
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            String updateTime = DateFormat.getTimeInstance().format(new Date());
+            mLastUpdateTextView.setText(String.format(Locale.US, getString(R.string.location_last_changed), updateTime));
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
             showMessageOKCancel("Allow access to your location to see colleges near you.",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_COARSE_LOCATION);
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_FINE_LOCATION);
                         }
                     });
         }
