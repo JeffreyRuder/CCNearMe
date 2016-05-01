@@ -422,7 +422,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             String updateTime = DateFormat.getTimeInstance().format(new Date());
-            mLastUpdateTextView.setText(String.format(Locale.US, getString(R.string.location_last_changed), updateTime));
+            mLastUpdateTextView.setText(String.format(Locale.US, getString(R.string.location_last_checked), updateTime));
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
             showMessageOKCancel("Allow access to your location to see colleges near you.",
@@ -439,7 +439,7 @@ public class MainActivity extends ModifiedFirebaseLoginBaseActivity
     public void onLocationChanged(Location location) {
         mLastLocation = location;
         String updateTime = DateFormat.getTimeInstance().format(new Date());
-        mLastUpdateTextView.setText(String.format(Locale.US, getString(R.string.location_last_changed), updateTime));
+        mLastUpdateTextView.setText(String.format(Locale.US, getString(R.string.location_last_checked), updateTime));
         useLastLocationToSearchForColleges();
     }
 

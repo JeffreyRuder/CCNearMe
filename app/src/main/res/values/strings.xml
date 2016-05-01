@@ -76,7 +76,7 @@
     <string name="how_to_share">How do you want to share?</string>
 
     <string name="main_activity_none_nearby">There are no nearby colleges.</string>
-    <string name="location_last_changed">"Your location last checked at %s"</string>
+    <string name="location_last_checked">"Location last checked at %s"</string>
 
     <string name="city_state" formatted="false">%s, %s</string>
     <string name="city_state_zip" formatted="false">%s, %s %d</string>
@@ -90,6 +90,5 @@
     <string name="about_us_main">College Near Me provides students and their families
         information about nearby colleges.\n\nCollege Near Me uses existing Department of
         Education data and adds the features of Android devices, like maps and sharing options.</string>
-
 
 </resources>
