@@ -5,24 +5,24 @@
         <item
             android:id="@+id/nav_about"
             android:icon="@android:drawable/ic_dialog_info"
-            android:title="About" />
+            android:title="@string/title_activity_about" />
         <item
             android:id="@+id/nav_saved"
             android:icon="@drawable/ic_folder_black_24dp"
-            android:title="Saved Colleges" />
+            android:title="@string/title_activity_saved" />
 
     </group>
 
-    <item android:title="Search Settings" >
+    <item android:title="@string/search_settings" >
         <menu android:checkableBehavior="all">
             <item
                 android:id="@+id/nav_private"
                 android:icon="@drawable/ic_thumb_down_black_24dp"
-                android:title="Include Private Colleges" />
+                android:title="@string/include_private_colleges" />
             <item
                 android:id="@+id/nav_for_profit"
                 android:icon="@drawable/ic_thumb_down_black_24dp"
-                android:title="Include For-Profit Colleges" />
+                android:title="@string/include_for_profit_colleges" />
         </menu>
     </item>
 

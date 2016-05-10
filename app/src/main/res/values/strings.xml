@@ -81,7 +81,7 @@
     <string name="city_state" formatted="false">%s, %s</string>
     <string name="city_state_zip" formatted="false">%s, %s %d</string>
 
-    <string name="card_placeholder_college_name">Collin County Community College</string>
+    <string name="card_placeholder_college_name">College Name</string>
     <string name="card_placeholder_college_city">Plano, TX</string>
     <string name="reorder_icon">Reorder Icon</string>
 
@@ -90,5 +90,8 @@
     <string name="about_us_main">College Near Me provides students and their families
         information about nearby colleges.\n\nCollege Near Me uses existing Department of
         Education data and adds the features of Android devices, like maps and sharing options.</string>
+    <string name="search_settings">Search Settings</string>
+    <string name="include_private_colleges">Include Private Colleges</string>
+    <string name="include_for_profit_colleges">Include For-Profit Colleges</string>
 
 </resources>
